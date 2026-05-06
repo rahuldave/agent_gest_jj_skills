@@ -7,6 +7,8 @@ This repository is the jj counterpart to `agent_gest_git_skills`. It keeps the
 Gest workflow concepts but changes the VCS contract:
 
 - use jj bookmarks as review/PR units
+- use LazyJJ aliases for GitButler-like local stack ergonomics inside jj
+- use `jj-stack` as the preferred stacked PR backend
 - use jj workspaces as the parallel write primitive
 - avoid raw git write commands in colocated jj/git repositories
 - use Claude hooks to translate Claude worktree isolation into jj workspaces
@@ -23,7 +25,8 @@ Gest workflow concepts but changes the VCS contract:
 - `docs/g_commands_cheatsheet.md`: quick guide to `gtw` and the stage skills.
 - `docs/just_command_contract.md`: reusable Justfile command-contract guidance.
 - `scripts/install.sh`: copy-based installer for target repos.
-- `scripts/sync_g_skills.sh`: sync g skills and hook adapters into a target repo.
+- `scripts/sync_g_skills.sh`: sync g skills, docs, templates, and optionally
+  hook adapters into a target repo.
 - `scripts/check_repo.sh`: repository shape and hook syntax checks.
 - `scripts/run_jj_workflow_lab.sh`: disposable four-situation jj workflow lab.
 - `tools/gest_mermaid_graph.py`: optional Gest graph exporter.
@@ -45,16 +48,28 @@ The installer copies:
 .codex/
 docs/*.md
 tools/gest_mermaid_graph.py
+templates/
 AGENTS.template.md -> AGENTS.md, only if AGENTS.md does not already exist
 ```
 
 After installation:
 
 1. Review `AGENTS.md` and replace placeholders.
-2. Initialize the target repo with jj if needed:
+2. Initialize the target repo with jj if needed. For a new GitHub-backed repo:
 
    ```bash
+   git init
+   gh repo create --source=. --public
    jj git init --colocate
+   ```
+
+   After the first meaningful change, create and push `main` explicitly:
+
+   ```bash
+   jj describe -m "chore: initialize project"
+   jj new
+   jj bookmark set main -r @-
+   jj git push --bookmark main
    ```
 
 3. Enable Codex hooks in the trusted project or user config:
@@ -79,10 +94,12 @@ Recommended:
 
 - `gh` for GitHub issue/PR checks
 - `jj-stack` for stacked PR creation from jj bookmarks
-- LazyJJ for personal local stack ergonomics
+- LazyJJ aliases for personal local stack ergonomics
 
-LazyJJ's stack aliases are useful for humans, but this repo does not depend on
-LazyJJ's Claude aliases. Agent orchestration belongs in skills and hooks.
+LazyJJ stack aliases (`jj start`, `jj create`, `jj tug`, `jj stack`, `jj ss`,
+`jj prs`, `jj sprs`, `jj uprs`) replace the GitButler local stack workflow.
+This repo does not depend on LazyJJ's Claude aliases. Agent orchestration
+belongs in skills and hooks.
 
 `jj-stack` is the preferred stacked PR backend because it leaves local jj
 history management to jj and focuses on turning bookmarked stacks into GitHub
@@ -95,10 +112,11 @@ just setup
 just verify
 ```
 
-`just verify` checks repository shape, shell syntax, hook JSON, and the four
-disposable jj workflow lab situations. The `jj-stack` PR submission part runs
-as a documented dry-run command and is only executed when the lab has the
-required GitHub-style remote/auth prerequisites.
+`just verify` checks repository shape, shell syntax, hook JSON, hook guardrail
+behavior, and the four disposable jj workflow lab situations. The lab uses a
+local bare remote by default to prove bookmark push mechanics without creating
+a GitHub repo. Live `jj-stack` PR submission remains gated by GitHub remote/auth
+prerequisites.
 
 ## Publishing
 
@@ -106,10 +124,12 @@ This repo is expected to be a jj repo with a colocated git store so it can be
 pushed to GitHub when ready:
 
 ```bash
+git init
+gh repo create --source=. --public
 jj git init --colocate
-jj commit -m "chore: initialize jj gest agent skills"
-jj bookmark create main -r @-
-jj git remote add origin git@github.com:rahuldave/agent_gest_jj_skills.git
+jj describe -m "chore: initialize jj gest agent skills"
+jj new
+jj bookmark set main -r @-
 jj git push --bookmark main
 ```
 

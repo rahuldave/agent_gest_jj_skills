@@ -19,6 +19,31 @@ in a jj workspace does not produce a branch that must be merged back. Its
 commits are immediately part of the shared repo history. Cleanup removes the
 workspace checkout and metadata.
 
+## JJ Basics
+
+The working copy is a commit named `@`. Use `jj describe -m "<message>"` to
+label the current working-copy commit while continuing to edit. Use
+`jj commit -m "<message>"` to finalize the current working-copy commit and
+advance to a fresh empty `@`. `jj new` advances to a fresh `@` without a final
+message.
+
+Bookmarks are named pointers, not branches. They do not advance automatically.
+Use `jj bookmark set <name> -r @-` or `jj bookmark move <name> --to @-` before
+pushing with `jj git push --bookmark <name>`.
+
+For a fresh GitHub-backed repo:
+
+```bash
+git init
+gh repo create --source=. --public
+jj git init --colocate
+# edit files
+jj describe -m "chore: initialize project"
+jj new
+jj bookmark set main -r @-
+jj git push --bookmark main
+```
+
 ## Metadata
 
 Use metadata for machine-queryable workflow facts:
@@ -33,7 +58,7 @@ github.pr_url=<url>
 vcs.tool=jj
 vcs.base_bookmark=main
 vcs.base_change=<change-id>
-vcs.review_mode=session-bookmark|development-bookmark|stacked-session|stacked-development|parallel-workspaces
+vcs.review_mode=session-bookmark|development-bookmark|multi-commit-bookmark|stacked-session|stacked-development|parallel-workspaces
 vcs.execution=main-workspace|jj-workspaces
 vcs.parallel_allowed=true|false
 vcs.bookmark=<bookmark-name>
@@ -54,7 +79,7 @@ vcs.write_scope=<paths-or-subsystems>
 2. Does it need `gsp` before implementation?
 3. Which durable parent task owns the work?
 4. Which tags and metadata apply?
-5. Is the review model a single bookmark or a bookmark stack?
+5. Is the review model a single bookmark, multi-commit bookmark, or bookmark stack?
 6. Is execution local or one jj workspace per independent task?
 7. Is GitHub issue promotion appropriate?
 8. Which stage skill owns the next step?
@@ -78,7 +103,23 @@ jj status
 jj diff
 # edit, verify, review
 jj commit -m "<conventional message>"
-jj bookmark create <bookmark> -r @-
+jj bookmark set <bookmark> -r @-
+jj git push --bookmark <bookmark>
+```
+
+LazyJJ stack work:
+
+```bash
+jj start
+jj create <bookmark>
+jj stack
+jj ss
+```
+
+Stacked PR preparation:
+
+```bash
+jst submit <top-bookmark> --dry-run
 ```
 
 Parallel independent work:
@@ -126,13 +167,16 @@ Use `gcm` at durable checkpoints. A jj checkpoint normally includes:
 jj status
 jj diff
 jj commit -m "<message>"
-jj bookmark create <bookmark> -r @-
+jj bookmark set <bookmark> -r @-
 jj git push --bookmark <bookmark>
 ```
 
-For stacked PRs, prefer `jj-stack`:
+For stacked PRs, use LazyJJ for local stack ergonomics and prefer `jj-stack` for
+GitHub PR creation/update when prerequisites exist:
 
 ```bash
+jj stack
+jj ss
 jst submit <top-bookmark> --dry-run
 jst submit <top-bookmark>
 ```
@@ -145,5 +189,6 @@ Merge only with explicit user approval.
 Use `gfm` for formatting/static checks, `gte` for tests and smoke/integration
 checks, `gdo` for docs, and `grv` for a review pass after every code change.
 
-Use `scripts/run_jj_workflow_lab.sh` to exercise the four supported workflow
-situations in a disposable repo.
+Use `scripts/run_jj_workflow_lab.sh` to exercise the four supported situations:
+plain bookmark review, multi-commit session bookmark, LazyJJ/jj-stack stack
+workflow, and parallel jj workspaces.
