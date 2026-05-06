@@ -23,6 +23,7 @@ required_files=(
   "scripts/sync_g_skills.sh"
   "scripts/run_jj_workflow_lab.sh"
   "scripts/run_jj_github_integration_lab.sh"
+  "scripts/run_tag_dependency_agent_dry_run.sh"
   "templates/README.md"
   "tools/gest_mermaid_graph.py"
 )
@@ -65,6 +66,8 @@ required_text=(
   "classification.tags.reviewed"
   "impact.ast_grep.required"
   "count-or-probability-coloring"
+  "probability-pill-colors"
+  "tag-dependency-dry-run"
   "ast-grep run"
   "jj workspace add"
 )

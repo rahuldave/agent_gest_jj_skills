@@ -84,6 +84,44 @@ src/pill.js
 That means a histogram-color task should either update the pill color surface in
 the same task or create a tagged child task before completion.
 
+The repository also includes a rerunnable agent dry run for this exact
+scenario:
+
+```bash
+just tag-dependency-dry-run
+```
+
+It creates a temporary fixture with `colors.js`, `histogram.js`, and `pill.js`,
+then simulates the agent classification pass and runs:
+
+```bash
+ast-grep run --lang javascript \
+  --pattern 'countOrProbabilityColorScale($$$)' \
+  --json=compact <fixture>/src
+```
+
+The expected agent transcript is:
+
+```text
+Agent dry run: tag classification
+- selected existing tag: count-or-probability-coloring
+- selected existing tag: histogram-colors
+- selected existing tag: probability-pill-colors
+- rejected near miss: reader-ui, because the prompt targeted shared color semantics rather than a full reader interaction change
+
+Agent dry run: ast-grep dependency impact
+- changed contract: countOrProbabilityColorScale
+- pattern: countOrProbabilityColorScale($$$)
+- dependers found: histogram.js, pill.js
+- required task expansion: update the pill color surface with the histogram color change, or create a tagged child task before completion
+```
+
+That transcript is the tutorial version of the tags-based fix: the model does
+not stop at "histogram colors." It selects the shared
+`count-or-probability-coloring` tag, notices the related
+`probability-pill-colors` tag, proves the code coupling with `ast-grep`, and
+expands the implementation scope before completion.
+
 ## Common Initialization
 
 Prompt:
