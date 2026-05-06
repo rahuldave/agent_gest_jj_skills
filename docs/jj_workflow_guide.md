@@ -176,6 +176,9 @@ the LazyJJ plus `jj-stack` stack, writes command logs and a markdown tutorial
 trace, and deletes every temp repository with `gh repo delete --yes` unless
 `AGENT_GEST_JJ_KEEP_GITHUB_REPOS=1` is set for debugging.
 
+For a prompt-first version suitable for handing to Codex, see
+`docs/live_github_jj_workflow_tutorial.md`.
+
 ### Situation 1: Plain JJ Bookmark Review Flow
 
 Use this when one coherent change should become one PR.
