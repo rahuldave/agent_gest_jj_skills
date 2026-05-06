@@ -102,9 +102,8 @@ else
 fi
 
 echo "Flow 4: parallel jj workspaces"
-jj new main >/dev/null
-jj workspace add "$workspace_a" --name demo-workspace-a -r @ >/dev/null
-jj workspace add "$workspace_b" --name demo-workspace-b -r @ >/dev/null
+jj workspace add "$workspace_a" --name demo-workspace-a -r main >/dev/null
+jj workspace add "$workspace_b" --name demo-workspace-b -r main >/dev/null
 
 (cd "$workspace_a" && printf 'workspace a isolated change\n' > workspace-a.txt && jj commit -m "test: add workspace a change" >/dev/null)
 (cd "$workspace_b" && printf 'workspace b isolated change\n' > workspace-b.txt && jj commit -m "test: add workspace b change" >/dev/null)

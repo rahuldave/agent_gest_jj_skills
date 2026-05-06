@@ -168,7 +168,7 @@ jj git push --bookmark <bookmark>
 Parallel independent work:
 
 ```bash
-jj workspace add ../gest-<task-id> --name <task-id> -r @
+jj workspace add ../gest-<task-id> --name <task-id> -r main
 (cd ../gest-<task-id> && gest project attach <project-id>)
 # worker runs in that workspace
 (cd ../gest-<task-id> && gest project detach)
@@ -177,6 +177,8 @@ rm -rf ../gest-<task-id>
 ```
 
 Do not use git worktrees in jj repos. Do not use raw git write commands.
+For PR-ready parallel work, base workspaces on `main` or another described base
+commit so pushed bookmarks do not include an empty undescribed ancestor.
 
 ## Claude Hooks
 
