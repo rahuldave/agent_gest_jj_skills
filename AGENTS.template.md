@@ -155,6 +155,18 @@ Use native Gest `child-of` / `parent-of` links for hierarchy. Tags are filters,
 not hierarchy. Claim one leaf task at a time, verify before completion, and keep
 long-lived outline parents open until the whole subtree is done.
 
+Before creating or splitting any task, run a tag classification pass against
+the current project tag vocabulary. Collect tags from tasks, artifacts, and
+iterations, prefer existing semantic tags, add new dynamic tags only when a
+missing concept is real, and record the selected/new/rejected tags when useful.
+Use `docs/tag_dependency_workflow.md` for the exact workflow.
+
+For code-facing changes, identify changed semantic contracts and use
+`ast-grep` to inspect dependers. If a task changes one surface of a coupled
+concept, such as histogram count/probability coloring, check related surfaces
+such as probability pills and legends before completion or create tagged
+follow-up tasks.
+
 For any Gest-tracked work that writes files, choose a jj review model and
 execution model before editing. Review bookmark names should be keyed to the
 highest meaningful Gest task for the workstream:

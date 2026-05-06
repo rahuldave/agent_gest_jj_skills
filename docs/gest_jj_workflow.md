@@ -69,7 +69,20 @@ vcs.workspace_path=<absolute-path>
 vcs.integration=bookmark-pr|stacked-pr|local-only
 vcs.owner_session=<thread-or-agent-label>
 vcs.write_scope=<paths-or-subsystems>
+classification.tags.reviewed=true|false
+classification.tags.new=<comma-separated-new-tags>
+impact.ast_grep.required=true|false
+impact.semantic_tags=<comma-separated-tags>
 ```
+
+## Tag And Dependency Impact
+
+Every new Gest task should run a tag classification pass against existing task,
+artifact, and iteration tags. Existing semantic tags are preferred; new dynamic
+tags are allowed when they capture a real missing concept. For code-facing
+changes, use `ast-grep` to find callers, imports, components, and other
+dependers of changed contracts. Use `docs/tag_dependency_workflow.md` for the
+full checklist and completion-note shape.
 
 ## GTW
 

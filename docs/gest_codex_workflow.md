@@ -91,7 +91,25 @@ vcs.workspace_path=<absolute-path>
 vcs.integration=bookmark-pr|stacked-pr|local-only
 vcs.owner_session=<thread-or-agent-label>
 vcs.write_scope=<paths-or-subsystems>
+classification.tags.reviewed=true|false
+classification.tags.new=<comma-separated-new-tags>
+impact.ast_grep.required=true|false
+impact.semantic_tags=<comma-separated-tags>
 ```
+
+## Tag And Dependency Impact
+
+Before creating or splitting tasks, classify the task against the current
+project tag vocabulary from tasks, artifacts, and iterations. Prefer existing
+semantic tags and add dynamic tags only when a real missing concept appears.
+Record selected/new/rejected tags in task tags, metadata, or a note. See
+`docs/tag_dependency_workflow.md`.
+
+For code-facing work, use `ast-grep` to inspect semantic dependers of changed
+contracts. If a tag or dependency search reveals coupled surfaces, expand the
+task or create linked children before implementation. This is how a histogram
+color change should discover probability pills or legends that encode the same
+count/probability color semantics.
 
 ## GTW
 

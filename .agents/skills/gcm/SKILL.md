@@ -23,7 +23,10 @@ jj git remote list
 ```
 
 Read related Gest notes and metadata. Look for `github.issue`, `github.url`,
-`vcs.bookmark`, `vcs.review_mode`, and stack metadata.
+`vcs.bookmark`, `vcs.review_mode`, and stack metadata. Also check
+`classification.tags.*` and `impact.ast_grep.*` metadata/notes from
+`docs/tag_dependency_workflow.md`; commit bodies should mention important tag
+or dependency-impact follow-ups when they affect reviewer expectations.
 
 ## JJ Commit Model
 

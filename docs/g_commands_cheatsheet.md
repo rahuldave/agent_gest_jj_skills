@@ -22,6 +22,11 @@ Use `gtw` for most substantial project work. The user may invoke it as `/gtw`,
 | `gpr` | Promote/sync durable work with GitHub issues. |
 | `gpa` | Review a GitHub PR before approval or merge. |
 
+Tag/dependency rule of thumb: when creating any task, classify it against the
+existing Gest tag vocabulary. When changing code contracts, run an `ast-grep`
+dependency impact pass and verify dependent surfaces/tests. See
+`docs/tag_dependency_workflow.md`.
+
 ## JJ Basics
 
 The working copy is a commit named `@`.

@@ -24,6 +24,8 @@ Gest workflow concepts but changes the VCS contract:
 - `docs/jj_workflow_guide.md`: user-facing guide and four disposable jj labs.
 - `docs/live_github_jj_workflow_tutorial.md`: prompt-first live GitHub tutorial
   for the four jj parity workflows.
+- `docs/tag_dependency_workflow.md`: tag classification and `ast-grep`
+  dependency-impact workflow for Gest task creation and code changes.
 - `docs/g_commands_cheatsheet.md`: quick guide to `gtw` and the stage skills.
 - `docs/just_command_contract.md`: reusable Justfile command-contract guidance.
 - `scripts/install.sh`: copy-based installer for target repos.
@@ -100,6 +102,8 @@ Recommended:
 - `gh` for GitHub issue/PR checks
 - `jj-stack` for stacked PR creation from jj bookmarks
 - LazyJJ aliases for personal local stack ergonomics
+- `ast-grep` for dependency-impact checks when code-facing tasks change shared
+  contracts
 
 LazyJJ stack aliases (`jj start`, `jj create`, `jj tug`, `jj stack`, `jj ss`,
 `jj prs`, `jj sprs`, `jj uprs`) replace the GitButler local stack workflow.

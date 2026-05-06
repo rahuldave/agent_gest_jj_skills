@@ -75,8 +75,8 @@ commands that modify user-level state.
    entrypoints.
 2. Initialize git/GitHub/jj only after confirming the desired repo root.
 3. Check required tools: `jj`, `git`, `gh`, `gest`, and `just`. Check optional
-   tools: `jst`, LazyJJ aliases (`jj lazyjj`), `direnv`, and browser tools when
-   the project needs them.
+   tools: `jst`, LazyJJ aliases (`jj lazyjj`), `ast-grep`, `direnv`, and
+   browser tools when the project needs them.
 4. Infer likely project profiles:
    - Python: `pyproject.toml`, `uv.lock`, FastAPI, Django, Flask, pytest, ruff,
      ty, pyright, mypy.
@@ -98,6 +98,11 @@ commands that modify user-level state.
 12. Run setup verification: tool discovery, `just --list`, cheap static checks,
     and representative focused command arguments.
 13. Record remaining setup gaps as Gest follow-ups.
+
+When setup creates follow-up tasks, classify them against existing project tags
+using `docs/tag_dependency_workflow.md`. If setup changes shared tooling,
+hooks, generated code, or command contracts, use `ast-grep` or targeted
+structured searches to find dependent scripts/docs before declaring setup done.
 
 ## Templates
 

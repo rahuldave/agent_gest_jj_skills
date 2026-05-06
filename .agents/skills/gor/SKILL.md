@@ -23,7 +23,11 @@ gest project --json
    - single task: run `gim` locally
    - dependent tasks: run sequentially
    - independent writable tasks: create one jj workspace per task
-4. Claim tasks with:
+4. Before dispatching a phase, confirm every task has had the tag
+   classification pass from `docs/tag_dependency_workflow.md`. For code-facing
+   tasks, make sure workers know which `ast-grep` dependency checks and
+   semantic tags apply.
+5. Claim tasks with:
 
 ```bash
 gest iteration next <id> --claim --agent <agent-name> --json
@@ -36,7 +40,7 @@ Exit code 75 means no work is currently available.
 For a parallel task:
 
 ```bash
-jj workspace add ../gest-<task-id> --name <task-id> -r @
+jj workspace add ../gest-<task-id> --name <task-id> -r main
 (cd ../gest-<task-id> && gest project attach <project-id>)
 ```
 

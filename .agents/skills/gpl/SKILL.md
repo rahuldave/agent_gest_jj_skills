@@ -36,6 +36,8 @@ Reuse existing durable parents when they fit.
 7. Which execution mode applies?
 8. Should GitHub issue/PR metadata be attached?
 9. Which verification/review/checkpoint leaves are required?
+10. Which existing or new semantic tags classify every task?
+11. Which changed contracts require `ast-grep` dependency impact checks?
 
 ## Output Structure
 
@@ -80,3 +82,12 @@ the same time in separate jj workspaces.
 
 Report task IDs, phase grouping, dependencies, metadata, and whether `gor` can
 parallelize the work.
+
+## Tag And Dependency Planning
+
+Apply `docs/tag_dependency_workflow.md` while decomposing work. For every
+planned task, classify tags against the current project vocabulary and add
+`classification.tags.reviewed=true` metadata. For code-facing phases, list the
+semantic contracts and `ast-grep` patterns that implementers must check. If
+tag/classifier results reveal coupled surfaces, make them explicit tasks or
+acceptance criteria instead of hoping implementers notice them later.

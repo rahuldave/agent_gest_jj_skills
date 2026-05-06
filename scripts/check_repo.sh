@@ -16,6 +16,7 @@ required_files=(
   "docs/gest_codex_workflow.md"
   "docs/jj_workflow_guide.md"
   "docs/live_github_jj_workflow_tutorial.md"
+  "docs/tag_dependency_workflow.md"
   "docs/g_commands_cheatsheet.md"
   "docs/just_command_contract.md"
   "scripts/install.sh"
@@ -61,6 +62,10 @@ required_text=(
   "jst submit"
   "gh repo delete --yes"
   "Prompt:"
+  "classification.tags.reviewed"
+  "impact.ast_grep.required"
+  "count-or-probability-coloring"
+  "ast-grep run"
   "jj workspace add"
 )
 

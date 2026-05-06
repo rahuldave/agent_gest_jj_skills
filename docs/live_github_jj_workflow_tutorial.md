@@ -38,6 +38,52 @@ just integration-live
 The harness refuses to create repositories until `gh auth status` shows
 `delete_repo`, because reliable cleanup is part of the test.
 
+## Tag And Dependency Prompt
+
+Give Codex this prompt whenever one of the flow tasks changes code behavior:
+
+```text
+Before creating the Gest task, collect existing project tags from tasks,
+artifacts, and iterations, classify this work against that vocabulary, and tell
+me which existing tags you selected, which new dynamic tags you added, and which
+near-miss tags you rejected. Then identify changed semantic contracts and run
+ast-grep over dependers. If a related surface should change too, expand the task
+or create a child task with the same semantic tag before implementing.
+```
+
+Worked example using the histogram/pill color coupling:
+
+```text
+User asks: change histogram colors for low-count bins.
+
+Classifier should select or create:
+- count-or-probability-coloring
+- histogram-colors
+- probability-pill-colors
+
+Coupled concept:
+- the same count/probability color scale is consumed by histogram bins, pills,
+  and legends.
+```
+
+Example code search:
+
+```bash
+ast-grep run --lang javascript \
+  --pattern 'countOrProbabilityColorScale($$$)' \
+  --json=compact src
+```
+
+Expected dependers in the tested fixture:
+
+```text
+src/histogram.js
+src/pill.js
+```
+
+That means a histogram-color task should either update the pill color surface in
+the same task or create a tagged child task before completion.
+
 ## Common Initialization
 
 Prompt:

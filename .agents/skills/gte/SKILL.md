@@ -45,18 +45,21 @@ gest search "browser audit <feature/module>" --all --json --limit 20
 gest search "Follow-up <feature/module>" --all --json --limit 20
 ```
 
-4. Add or update tests for changed inner functions and APIs when coverage is
+4. Inspect tag/dependency notes from `docs/tag_dependency_workflow.md`; tests
+   must cover dependers found by semantic tags or `ast-grep`, not only the file
+   directly edited.
+5. Add or update tests for changed inner functions and APIs when coverage is
    missing.
-5. Run the relevant focused tests first.
-6. Run the broader project test suite.
-7. Run smoke checks when they exercise cross-system wiring.
-8. Run browser spot checks for frontend, UI, or interaction changes.
-9. Before browser-based checks, ensure the app is served through the project
+6. Run the relevant focused tests first.
+7. Run the broader project test suite.
+8. Run smoke checks when they exercise cross-system wiring.
+9. Run browser spot checks for frontend, UI, or interaction changes.
+10. Before browser-based checks, ensure the app is served through the project
    run-app contract, commonly `just dev [port]`, or confirm that an existing
    server is already running.
-10. Run durable integration/browser checks when the project contract defines
+11. Run durable integration/browser checks when the project contract defines
    them or the flow needs regression coverage.
-11. Report commands and results. If a layer cannot run, say exactly why.
+12. Report commands and results. If a layer cannot run, say exactly why.
 
 Prefer `just` targets when the project contract defines them. For the reusable
 Just contract shape, see `docs/just_command_contract.md`. Typical shapes
