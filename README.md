@@ -29,6 +29,9 @@ Gest workflow concepts but changes the VCS contract:
   hook adapters into a target repo.
 - `scripts/check_repo.sh`: repository shape and hook syntax checks.
 - `scripts/run_jj_workflow_lab.sh`: disposable four-situation jj workflow lab.
+- `scripts/run_jj_github_integration_lab.sh`: live GitHub integration lab that
+  runs the four examples in four separate temporary repos, captures a jj
+  tutorial trace, and deletes the repos with `gh repo delete --yes`.
 - `tools/gest_mermaid_graph.py`: optional Gest graph exporter.
 - `templates/`: reusable setup snippets for language/profile setup.
 
@@ -117,6 +120,20 @@ behavior, and the four disposable jj workflow lab situations. The lab uses a
 local bare remote by default to prove bookmark push mechanics without creating
 a GitHub repo. Live `jj-stack` PR submission remains gated by GitHub remote/auth
 prerequisites.
+
+For a real GitHub integration pass, run:
+
+```bash
+gh auth status -h github.com
+gh auth refresh -h github.com -s delete_repo # if delete_repo is missing
+just integration-live
+```
+
+The live lab preflights authenticated `gh`, requires the `delete_repo` scope,
+creates four private temporary GitHub repositories, runs one parity example per
+repo, captures command logs plus a markdown jj tutorial trace under `/tmp`, and
+then destroys the repositories with `gh repo delete --yes`. Use
+`AGENT_GEST_JJ_KEEP_GITHUB_REPOS=1` only when debugging a failed run.
 
 ## Publishing
 

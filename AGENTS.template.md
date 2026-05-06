@@ -132,12 +132,14 @@ Use jj workspaces as the parallel write primitive. Do not mix git worktrees
 with jj workspaces.
 
 ```bash
-jj workspace add <path> --name <name> -r @
+jj workspace add <path> --name <name> -r main
 jj workspace forget <name>
 ```
 
 JJ workspaces share the same commit graph and op log. Commits made in one
 workspace are visible in every other workspace; no merge-back is required.
+For pushed worker bookmarks, base the workspace on `main` or another described
+commit rather than an empty undescribed coordinator commit.
 
 ## Gest Workflow
 

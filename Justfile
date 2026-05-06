@@ -11,6 +11,9 @@ static: lint
 test:
   scripts/run_jj_workflow_lab.sh
 
+integration-live:
+  scripts/run_jj_github_integration_lab.sh
+
 jj-stack:
   test -x node_modules/.bin/jst
 

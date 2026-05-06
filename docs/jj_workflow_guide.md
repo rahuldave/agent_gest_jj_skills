@@ -162,6 +162,20 @@ push mechanics are exercised without creating a throwaway GitHub repository.
 The GitHub-backed initialization sequence is still documented above and should
 be used for real new GitHub repos.
 
+For a full live integration tutorial, run the GitHub lab:
+
+```bash
+gh auth status -h github.com
+gh auth refresh -h github.com -s delete_repo # if delete_repo is missing
+scripts/run_jj_github_integration_lab.sh
+```
+
+That script creates four separate temporary GitHub repositories, one for each
+example below. It uses authenticated `gh`, exercises real PR creation including
+the LazyJJ plus `jj-stack` stack, writes command logs and a markdown tutorial
+trace, and deletes every temp repository with `gh repo delete --yes` unless
+`AGENT_GEST_JJ_KEEP_GITHUB_REPOS=1` is set for debugging.
+
 ### Situation 1: Plain JJ Bookmark Review Flow
 
 Use this when one coherent change should become one PR.
@@ -228,9 +242,8 @@ or gated LazyJJ PR aliases can create/update stacked PRs with the correct bases.
 Use this when independent writable tasks can run concurrently.
 
 ```bash
-jj new main
-jj workspace add ../lab-workspace-a --name demo-workspace-a -r @
-jj workspace add ../lab-workspace-b --name demo-workspace-b -r @
+jj workspace add ../lab-workspace-a --name demo-workspace-a -r main
+jj workspace add ../lab-workspace-b --name demo-workspace-b -r main
 
 (cd ../lab-workspace-a && printf 'workspace a\n' > workspace-a.txt && jj commit -m "test: add workspace a")
 (cd ../lab-workspace-b && printf 'workspace b\n' > workspace-b.txt && jj commit -m "test: add workspace b")
@@ -243,6 +256,10 @@ rm -rf ../lab-workspace-a ../lab-workspace-b
 
 Expected shape: both worker commits are visible from the main workspace because
 the workspaces share a commit graph. There is no merge-back step.
+
+If the workspace commits will be pushed as PR bookmarks, base the workspaces on
+`main` or another described commit. Do not put an empty undescribed coordinator
+commit between `main` and the pushed worker bookmarks.
 
 ## Common Mistakes
 

@@ -20,6 +20,7 @@ required_files=(
   "scripts/install.sh"
   "scripts/sync_g_skills.sh"
   "scripts/run_jj_workflow_lab.sh"
+  "scripts/run_jj_github_integration_lab.sh"
   "templates/README.md"
   "tools/gest_mermaid_graph.py"
 )
@@ -57,6 +58,7 @@ required_text=(
   "jj start"
   "jj create"
   "jst submit"
+  "gh repo delete --yes"
   "jj workspace add"
 )
 
