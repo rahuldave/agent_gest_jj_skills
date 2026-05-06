@@ -160,6 +160,17 @@ Verification:
 If a depender is out of scope for the current task, create or link a follow-up
 task before completion and tag it with the same semantic tag.
 
+To exercise the workflow as an agent-style dry run, use:
+
+```bash
+just tag-dependency-dry-run
+```
+
+The dry run builds a small fixture, classifies a histogram color change against
+the existing tags `count-or-probability-coloring`, `histogram-colors`, and
+`probability-pill-colors`, then uses `ast-grep` to prove both histogram and pill
+dependers need to be checked.
+
 ## Completion Notes
 
 Completion notes for code-facing tasks should mention both passes:

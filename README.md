@@ -36,6 +36,8 @@ Gest workflow concepts but changes the VCS contract:
 - `scripts/run_jj_github_integration_lab.sh`: live GitHub integration lab that
   runs the four examples in four separate temporary repos, captures a jj
   tutorial trace, and deletes the repos with `gh repo delete --yes`.
+- `scripts/run_tag_dependency_agent_dry_run.sh`: local agent dry run for tag
+  classification plus `ast-grep` dependency expansion.
 - `tools/gest_mermaid_graph.py`: optional Gest graph exporter.
 - `templates/`: reusable setup snippets for language/profile setup.
 
@@ -122,9 +124,10 @@ just verify
 ```
 
 `just verify` checks repository shape, shell syntax, hook JSON, hook guardrail
-behavior, and the four disposable jj workflow lab situations. The lab uses a
-local bare remote by default to prove bookmark push mechanics without creating
-a GitHub repo. Live `jj-stack` PR submission remains gated by GitHub remote/auth
+behavior, the four disposable jj workflow lab situations, the tag/dependency
+agent dry run, jj-stack installation, and diff hygiene. The lab uses a local
+bare remote by default to prove bookmark push mechanics without creating a
+GitHub repo. Live `jj-stack` PR submission remains gated by GitHub remote/auth
 prerequisites.
 
 For a real GitHub integration pass, run:
