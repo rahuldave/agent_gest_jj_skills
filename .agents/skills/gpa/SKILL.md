@@ -66,6 +66,9 @@ gest iteration status <iteration-id> --json
 Look for parent tasks, leaves, artifacts/specs, completion notes, GitHub issue
 metadata, `github.pr`, `github.pr_url`, `vcs.bookmark`, `vcs.stack_*`, and
 graph paths.
+Also look for tag classification and dependency impact notes from
+`docs/tag_dependency_workflow.md`, especially selected semantic tags and
+`ast-grep` dependers.
 
 ## Review
 
@@ -84,6 +87,8 @@ Findings first. Check:
 - raw git write instructions in a jj repo
 - git worktree usage instead of jj workspaces
 - stack flows that lack bottom-up or `jj-stack`/LazyJJ PR guidance
+- missing tag classification or missing `ast-grep` dependency impact coverage
+  for code-facing PRs
 
 If no findings exist, say so clearly and list residual risk.
 

@@ -25,6 +25,9 @@ Before editing files, make the tracking decision visible:
 7. Is GitHub issue or PR promotion appropriate?
 8. Which stage skill runs next?
 9. Is this a commit/bookmark/push checkpoint?
+10. Which existing tags classify this work, and which new dynamic tags are
+    justified?
+11. Which semantic dependers should be checked with `ast-grep` if code changes?
 
 Everything substantial should become a Gest task or issue with appropriate
 dependencies. For multi-stage work, create a small treelet: one parent task for
@@ -152,7 +155,24 @@ vcs.stack_index=<n>
 vcs.workspace_path=<absolute-path>
 vcs.integration=bookmark-pr|stacked-pr|local-only
 vcs.write_scope=<paths-or-subsystems>
+classification.tags.reviewed=true|false
+classification.tags.new=<comma-separated-new-tags>
+impact.ast_grep.required=true|false
+impact.semantic_tags=<comma-separated-tags>
 ```
+
+## Tag And Dependency Classifier
+
+Use `docs/tag_dependency_workflow.md` whenever GTW creates, splits, or expands
+tasks. Before `gest task create`, collect existing tags from tasks, artifacts,
+and iterations, then classify the new task against that vocabulary. Prefer
+existing semantic tags; add dynamic tags only when they describe a missing
+concept. Record selected/new/rejected tags in task tags, metadata, or a note.
+
+For code-facing work, identify changed semantic contracts and plan an
+`ast-grep` dependency impact pass. If a selected tag reveals coupled surfaces
+such as histogram and pill color mapping, expand the task or create linked
+children before implementation.
 
 ## Creating Work
 

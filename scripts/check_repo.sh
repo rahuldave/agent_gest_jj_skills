@@ -16,12 +16,14 @@ required_files=(
   "docs/gest_codex_workflow.md"
   "docs/jj_workflow_guide.md"
   "docs/live_github_jj_workflow_tutorial.md"
+  "docs/tag_dependency_workflow.md"
   "docs/g_commands_cheatsheet.md"
   "docs/just_command_contract.md"
   "scripts/install.sh"
   "scripts/sync_g_skills.sh"
   "scripts/run_jj_workflow_lab.sh"
   "scripts/run_jj_github_integration_lab.sh"
+  "scripts/run_tag_dependency_agent_dry_run.sh"
   "templates/README.md"
   "tools/gest_mermaid_graph.py"
 )
@@ -61,6 +63,12 @@ required_text=(
   "jst submit"
   "gh repo delete --yes"
   "Prompt:"
+  "classification.tags.reviewed"
+  "impact.ast_grep.required"
+  "count-or-probability-coloring"
+  "probability-pill-colors"
+  "tag-dependency-dry-run"
+  "ast-grep run"
   "jj workspace add"
 )
 

@@ -27,6 +27,10 @@ Inspect relevant hits with `gest task show`, `gest task note list`, and
 `gest iteration show`. Include durable references in the spec's `References`
 section when they shape the proposal.
 
+Also run the tag/dependency discovery from `docs/tag_dependency_workflow.md` so
+the spec captures existing semantic tags, proposed new tags, and code surfaces
+that should be checked with `ast-grep`.
+
 ## Spec Shape
 
 ```markdown

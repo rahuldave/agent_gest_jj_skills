@@ -24,6 +24,8 @@ Gest workflow concepts but changes the VCS contract:
 - `docs/jj_workflow_guide.md`: user-facing guide and four disposable jj labs.
 - `docs/live_github_jj_workflow_tutorial.md`: prompt-first live GitHub tutorial
   for the four jj parity workflows.
+- `docs/tag_dependency_workflow.md`: tag classification and `ast-grep`
+  dependency-impact workflow for Gest task creation and code changes.
 - `docs/g_commands_cheatsheet.md`: quick guide to `gtw` and the stage skills.
 - `docs/just_command_contract.md`: reusable Justfile command-contract guidance.
 - `scripts/install.sh`: copy-based installer for target repos.
@@ -34,6 +36,8 @@ Gest workflow concepts but changes the VCS contract:
 - `scripts/run_jj_github_integration_lab.sh`: live GitHub integration lab that
   runs the four examples in four separate temporary repos, captures a jj
   tutorial trace, and deletes the repos with `gh repo delete --yes`.
+- `scripts/run_tag_dependency_agent_dry_run.sh`: local agent dry run for tag
+  classification plus `ast-grep` dependency expansion.
 - `tools/gest_mermaid_graph.py`: optional Gest graph exporter.
 - `templates/`: reusable setup snippets for language/profile setup.
 
@@ -100,6 +104,8 @@ Recommended:
 - `gh` for GitHub issue/PR checks
 - `jj-stack` for stacked PR creation from jj bookmarks
 - LazyJJ aliases for personal local stack ergonomics
+- `ast-grep` for dependency-impact checks when code-facing tasks change shared
+  contracts
 
 LazyJJ stack aliases (`jj start`, `jj create`, `jj tug`, `jj stack`, `jj ss`,
 `jj prs`, `jj sprs`, `jj uprs`) replace the GitButler local stack workflow.
@@ -118,9 +124,10 @@ just verify
 ```
 
 `just verify` checks repository shape, shell syntax, hook JSON, hook guardrail
-behavior, and the four disposable jj workflow lab situations. The lab uses a
-local bare remote by default to prove bookmark push mechanics without creating
-a GitHub repo. Live `jj-stack` PR submission remains gated by GitHub remote/auth
+behavior, the four disposable jj workflow lab situations, the tag/dependency
+agent dry run, jj-stack installation, and diff hygiene. The lab uses a local
+bare remote by default to prove bookmark push mechanics without creating a
+GitHub repo. Live `jj-stack` PR submission remains gated by GitHub remote/auth
 prerequisites.
 
 For a real GitHub integration pass, run:

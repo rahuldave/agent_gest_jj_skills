@@ -42,5 +42,9 @@ Use raw git only for read-only inspection or for a command-contract diff check
 that intentionally validates the colocated git patch. Do not use raw git write
 commands or git worktrees.
 
+For code-facing changes, `gfm` may include lightweight `ast-grep` syntax or
+pattern checks from `docs/tag_dependency_workflow.md` when those checks are part
+of the mechanical contract.
+
 If no command contract exists, inspect manifests and route to `gsu` to establish
 one before guessing language-specific tools.

@@ -25,14 +25,18 @@ gest search "Follow-up <feature/module>" --all --json --limit 20
 
 Carry forward real `Follow-up` items and verification constraints.
 
-3. If the task is too broad, split it with `gpl`/`gis`.
-4. Claim it:
+3. Re-run the tag/dependency workflow from `docs/tag_dependency_workflow.md`.
+   Confirm selected tags still fit, add missing semantic tags, and identify
+   changed contracts that need `ast-grep` depender checks.
+4. If the task is too broad or coupled surfaces are missing, split it with
+   `gpl`/`gis`.
+5. Claim it:
 
 ```bash
 gest task claim --as codex <id> --quiet
 ```
 
-5. Confirm jj review/execution metadata before editing:
+6. Confirm jj review/execution metadata before editing:
 
 ```text
 vcs.tool=jj
@@ -47,27 +51,31 @@ If the task was assigned to a jj workspace, work in that workspace and do not
 create another workspace layer. If `vcs.execution=jj-workspaces`, each parallel
 worker must have a distinct `vcs.workspace_path`.
 
-6. Inspect relevant code/docs.
-7. Make scoped edits.
-8. Run `gfm` for formatting, linting, typechecking, compile/static checks, and
+7. Inspect relevant code/docs.
+8. Before editing code contracts, run `ast-grep` searches for callers,
+   imports, components, selectors, or other dependers. Use `rg` only as a
+   fallback or for literal non-AST assets.
+9. Make scoped edits.
+10. Run `gfm` for formatting, linting, typechecking, compile/static checks, and
    diff hygiene.
-9. Run `gte` for focused tests, regression tests, smoke checks, and integration
+11. Run `gte` for focused tests, regression tests, smoke checks, and integration
    checks appropriate to changed behavior. Changed callable scripts/hooks need
    focused tests or simulated coverage.
-10. Run browser/visual checks for frontend or browser UI changes when the
+12. Run browser/visual checks for frontend or browser UI changes when the
     project contract maps them.
-11. Run `gdo` when docs, examples, workflow guidance, command references, or
+13. Run `gdo` when docs, examples, workflow guidance, command references, or
     in-code documentation are affected.
-12. Run `grv` after code changes. Fix or record findings before completion.
-13. Add a completion note before completion:
+14. Run `grv` after code changes. Fix or record findings before completion.
+15. Add a completion note before completion:
 
 ```bash
 gest task note add <id> --agent codex --body "Done: ...\nVerification: ...\nFollow-up: ..."
 ```
 
 Use `Done` and `Verification`. Add `Follow-up` only for real residual work.
+Include tag classification and dependency impact results for code-facing work.
 
-14. Complete only after verification and review:
+16. Complete only after verification and review:
 
 ```bash
 gest task complete <id> --quiet

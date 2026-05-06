@@ -38,6 +38,90 @@ just integration-live
 The harness refuses to create repositories until `gh auth status` shows
 `delete_repo`, because reliable cleanup is part of the test.
 
+## Tag And Dependency Prompt
+
+Give Codex this prompt whenever one of the flow tasks changes code behavior:
+
+```text
+Before creating the Gest task, collect existing project tags from tasks,
+artifacts, and iterations, classify this work against that vocabulary, and tell
+me which existing tags you selected, which new dynamic tags you added, and which
+near-miss tags you rejected. Then identify changed semantic contracts and run
+ast-grep over dependers. If a related surface should change too, expand the task
+or create a child task with the same semantic tag before implementing.
+```
+
+Worked example using the histogram/pill color coupling:
+
+```text
+User asks: change histogram colors for low-count bins.
+
+Classifier should select or create:
+- count-or-probability-coloring
+- histogram-colors
+- probability-pill-colors
+
+Coupled concept:
+- the same count/probability color scale is consumed by histogram bins, pills,
+  and legends.
+```
+
+Example code search:
+
+```bash
+ast-grep run --lang javascript \
+  --pattern 'countOrProbabilityColorScale($$$)' \
+  --json=compact src
+```
+
+Expected dependers in the tested fixture:
+
+```text
+src/histogram.js
+src/pill.js
+```
+
+That means a histogram-color task should either update the pill color surface in
+the same task or create a tagged child task before completion.
+
+The repository also includes a rerunnable agent dry run for this exact
+scenario:
+
+```bash
+just tag-dependency-dry-run
+```
+
+It creates a temporary fixture with `colors.js`, `histogram.js`, and `pill.js`,
+then simulates the agent classification pass and runs:
+
+```bash
+ast-grep run --lang javascript \
+  --pattern 'countOrProbabilityColorScale($$$)' \
+  --json=compact <fixture>/src
+```
+
+The expected agent transcript is:
+
+```text
+Agent dry run: tag classification
+- selected existing tag: count-or-probability-coloring
+- selected existing tag: histogram-colors
+- selected existing tag: probability-pill-colors
+- rejected near miss: reader-ui, because the prompt targeted shared color semantics rather than a full reader interaction change
+
+Agent dry run: ast-grep dependency impact
+- changed contract: countOrProbabilityColorScale
+- pattern: countOrProbabilityColorScale($$$)
+- dependers found: histogram.js, pill.js
+- required task expansion: update the pill color surface with the histogram color change, or create a tagged child task before completion
+```
+
+That transcript is the tutorial version of the tags-based fix: the model does
+not stop at "histogram colors." It selects the shared
+`count-or-probability-coloring` tag, notices the related
+`probability-pill-colors` tag, proves the code coupling with `ast-grep`, and
+expands the implementation scope before completion.
+
 ## Common Initialization
 
 Prompt:

@@ -33,3 +33,7 @@ is clear enough to write acceptance criteria.
 
 Use Gest notes to recover prior decisions, rejected approaches, browser-audit
 findings, and unresolved follow-ups before recommending a path.
+
+For brainstorms that may become tasks, use the tag classifier in
+`docs/tag_dependency_workflow.md` to surface existing semantic tags and likely
+coupled concepts early.

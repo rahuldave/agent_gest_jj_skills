@@ -32,6 +32,10 @@ gest search "<module/feature> review" --all --json --limit 20
 gest search "Follow-up <module/feature>" --all --json --limit 20
 ```
 
+Review the task's tag classification and dependency impact notes from
+`docs/tag_dependency_workflow.md`. If code contracts changed, inspect the
+`ast-grep` patterns that were run and the dependers they found.
+
 ## Review Checklist
 
 Findings first, ordered by severity, with file/line references:
@@ -48,6 +52,10 @@ Findings first, ordered by severity, with file/line references:
 - Claude WorktreeCreate/Remove wrappers that are not tested with payloads
 - structural ordering and test convention violations when project docs define
   them; in jj-profile repos these may be blocking findings
+- missing tag classification for newly created or expanded tasks
+- missing `ast-grep` dependency impact checks for changed code contracts
+- dependent surfaces found by tags or ast-grep that were not updated, tested,
+  or turned into follow-up tasks
 
 If no issues are found, say so clearly and mention residual risk or test gaps.
 

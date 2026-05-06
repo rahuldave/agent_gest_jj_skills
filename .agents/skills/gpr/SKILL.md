@@ -20,13 +20,15 @@ GitHub issue integration for development work.
 ## Workflow
 
 1. Read the Gest task/iteration/spec.
-2. Sanitize internal details: remove Gest IDs, implementation-only paths, and
+2. Include tag classification context from `docs/tag_dependency_workflow.md`
+   when public-safe; semantic tags often make GitHub issues easier to search.
+3. Sanitize internal details: remove Gest IDs, implementation-only paths, and
    private workflow notes.
-3. Draft a GitHub issue body focused on user story, context, acceptance
+4. Draft a GitHub issue body focused on user story, context, acceptance
    criteria, and out-of-scope.
-4. Ask the user before running `gh issue create` or `gh issue edit`, unless the
+5. Ask the user before running `gh issue create` or `gh issue edit`, unless the
    user has already agreed to GitHub issue integration for this workflow scope.
-5. Store metadata after creation:
+6. Store metadata after creation:
 
 ```bash
 gest task meta set <id> github.issue <number>
