@@ -1,0 +1,39 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh -c 'ROOT=$(jj workspace root 2>/dev/null || git rev-parse --show-toplevel 2>/dev/null || pwd); \"$ROOT/.codex/hooks/session-start.sh\"'",
+            "statusMessage": "Loading jj workflow context"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh -c 'ROOT=$(jj workspace root 2>/dev/null || git rev-parse --show-toplevel 2>/dev/null || pwd); \"$ROOT/.codex/hooks/raw-git-write-guard.sh\"'",
+            "statusMessage": "Checking jj VCS policy"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh -c 'ROOT=$(jj workspace root 2>/dev/null || git rev-parse --show-toplevel 2>/dev/null || pwd); \"$ROOT/.codex/hooks/jj-snapshot.sh\"'",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}

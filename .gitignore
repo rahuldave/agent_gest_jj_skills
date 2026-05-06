@@ -1,0 +1,10 @@
+.DS_Store
+__pycache__/
+*.pyc
+.gest/
+.jj/
+node_modules/
+.local/
+package-lock.json.tmp
+*.log
+.DS_Store

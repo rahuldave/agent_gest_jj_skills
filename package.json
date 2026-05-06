@@ -1,0 +1,15 @@
+{
+  "name": "agent-gest-jj-skills",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Reusable Gest agent skills and hooks for jj repositories.",
+  "type": "module",
+  "scripts": {
+    "check": "bash scripts/check_repo.sh",
+    "test": "bash scripts/run_jj_workflow_lab.sh",
+    "verify": "just verify"
+  },
+  "devDependencies": {
+    "jj-stack": "1.2.1"
+  }
+}
