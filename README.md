@@ -22,6 +22,8 @@ Gest workflow concepts but changes the VCS contract:
 - `AGENTS.template.md`: starter agent instructions for target repositories.
 - `docs/gest_jj_workflow.md`: the full jj/Gest/Codex/Claude workflow playbook.
 - `docs/jj_workflow_guide.md`: user-facing guide and four disposable jj labs.
+- `docs/live_github_jj_workflow_tutorial.md`: prompt-first live GitHub tutorial
+  for the four jj parity workflows.
 - `docs/g_commands_cheatsheet.md`: quick guide to `gtw` and the stage skills.
 - `docs/just_command_contract.md`: reusable Justfile command-contract guidance.
 - `scripts/install.sh`: copy-based installer for target repos.
@@ -134,6 +136,9 @@ creates four private temporary GitHub repositories, runs one parity example per
 repo, captures command logs plus a markdown jj tutorial trace under `/tmp`, and
 then destroys the repositories with `gh repo delete --yes`. Use
 `AGENT_GEST_JJ_KEEP_GITHUB_REPOS=1` only when debugging a failed run.
+
+For a prompt-first walkthrough of the same four flows, read
+`docs/live_github_jj_workflow_tutorial.md`.
 
 ## Publishing
 

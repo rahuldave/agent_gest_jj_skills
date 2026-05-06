@@ -15,6 +15,7 @@ required_files=(
   "docs/gest_jj_workflow.md"
   "docs/gest_codex_workflow.md"
   "docs/jj_workflow_guide.md"
+  "docs/live_github_jj_workflow_tutorial.md"
   "docs/g_commands_cheatsheet.md"
   "docs/just_command_contract.md"
   "scripts/install.sh"
@@ -59,6 +60,7 @@ required_text=(
   "jj create"
   "jst submit"
   "gh repo delete --yes"
+  "Prompt:"
   "jj workspace add"
 )
 
