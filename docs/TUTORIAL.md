@@ -14,6 +14,24 @@ You will learn:
 Only step 3 uses jj-stack as the main PR submission tool. GitButler is not used
 in this tutorial.
 
+## Latest Live Run
+
+This tutorial was rerun against live temporary GitHub repositories on
+2026-05-07. The historical transcript is
+`docs/live_jj_tutorial_transcript_2026-05-07.md`.
+
+Observed results:
+
+- Step 1 used a jj bookmark and opened `tutorial/plain-bookmark` into `main`.
+- Step 2 used one jj bookmark at the top of a two-commit chain and opened it
+  into `main`.
+- Step 3 used LazyJJ aliases plus `jst submit tutorial/stack-child`; `jj-stack`
+  created both stacked PRs with `tutorial/stack-base -> main` and
+  `tutorial/stack-child -> tutorial/stack-base`.
+- Step 4 used two jj workspaces and opened two independent PRs into `main`.
+- Cleanup deleted all four temporary GitHub repositories with
+  `gh repo delete --yes`.
+
 ## What This Tutorial Will Do
 
 The agent will create and later delete these GitHub repositories under your
