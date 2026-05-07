@@ -1,5 +1,8 @@
 # G Commands Cheat Sheet For JJ Repos
 
+If you are new, start with `docs/TUTORIAL.md`. This cheat sheet is a compact
+reference, not the beginner tutorial.
+
 Use `gtw` for most substantial project work. The user may invoke it as `/gtw`,
 `$gtw`, or `gtw:`.
 
@@ -141,14 +144,16 @@ Parallel work:
 gor -> jj workspace add per independent task -> gim in each workspace -> workspace forget -> verify graph
 ```
 
-## Four Practice Situations
+## Practice Situations
 
-The full guide in `docs/jj_workflow_guide.md` includes a disposable lab for:
+The beginner tutorial in `docs/TUTORIAL.md` includes deterministic prompts and
+checks for:
 
 - plain jj bookmark review flow
 - multi-commit session bookmark flow
-- GitButler replacement flow through jj + LazyJJ aliases + gated jj-stack PR prep
-- parallel jj workspaces replacing git worktrees
+- stacked jj PR flow through LazyJJ aliases and `jj-stack`
+- parallel jj workspace flow
+- tag classification and ast-grep dependency-impact workflow
 
 Run:
 

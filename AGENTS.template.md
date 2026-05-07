@@ -20,7 +20,7 @@ request, it must say why in the final response.
 - Main source directory: `<replace-me>`
 - Primary docs/specs: `<replace-me>`
 - Detailed workflow playbook: `docs/gest_jj_workflow.md`
-- Hands-on jj workflow guide: `docs/jj_workflow_guide.md`
+- Hands-on jj tutorial: `docs/TUTORIAL.md`
 
 Replace this section with project-specific invariants, runtime commands, and
 verification commands.

@@ -20,14 +20,9 @@ Gest workflow concepts but changes the VCS contract:
 - `.claude/`: Claude Code settings, skill links, and jj hook adapters.
 - `.codex/`: Codex hook config and guardrail scripts.
 - `AGENTS.template.md`: starter agent instructions for target repositories.
-- `docs/gest_jj_workflow.md`: the full jj/Gest/Codex/Claude workflow playbook.
-- `docs/jj_workflow_guide.md`: user-facing guide and four disposable jj labs.
-- `docs/live_github_jj_workflow_tutorial.md`: prompt-first live GitHub tutorial
-  for the four jj parity workflows.
-- `docs/tag_dependency_workflow.md`: tag classification and `ast-grep`
-  dependency-impact workflow for Gest task creation and code changes.
-- `docs/g_commands_cheatsheet.md`: quick guide to `gtw` and the stage skills.
-- `docs/just_command_contract.md`: reusable Justfile command-contract guidance.
+- `docs/README.md`: documentation map.
+- `docs/TUTORIAL.md`: the deterministic beginner tutorial. Start here.
+- `docs/*.md`: reference docs and setup examples for users who need details.
 - `scripts/install.sh`: copy-based installer for target repos.
 - `scripts/sync_g_skills.sh`: sync g skills, docs, templates, and optionally
   hook adapters into a target repo.
@@ -144,8 +139,10 @@ repo, captures command logs plus a markdown jj tutorial trace under `/tmp`, and
 then destroys the repositories with `gh repo delete --yes`. Use
 `AGENT_GEST_JJ_KEEP_GITHUB_REPOS=1` only when debugging a failed run.
 
-For a prompt-first walkthrough of the same four flows, read
-`docs/live_github_jj_workflow_tutorial.md`.
+For a deterministic walkthrough of the same four flows, read
+`docs/TUTORIAL.md`. It is the only beginner tutorial. It uses jj bookmarks for
+simple PRs, `jj-stack` for stacked dependent PRs, and jj workspaces for
+independent parallel slices. GitButler is not part of the jj tutorial.
 
 ## Publishing
 
