@@ -9,7 +9,7 @@ GTW is the default entry point before substantial file-writing work in a
 Gest-managed jj repository.
 
 Read `docs/gest_codex_workflow.md` when more detail is needed. Use
-`docs/jj_workflow_guide.md` for hands-on bookmark, LazyJJ, jj-stack, and
+`docs/TUTORIAL.md` for hands-on bookmark, LazyJJ, jj-stack, and
 workspace flows.
 
 ## Core Job

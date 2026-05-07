@@ -11,6 +11,9 @@ static: lint
 test:
   scripts/run_jj_workflow_lab.sh
 
+workflow-lab:
+  scripts/run_jj_workflow_lab.sh
+
 tag-dependency-dry-run:
   scripts/run_tag_dependency_agent_dry_run.sh
 
