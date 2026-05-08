@@ -8,7 +8,8 @@ typecheck:
   GOCACHE="$PWD/.local/go-build" GOMODCACHE="$PWD/.local/go-mod" go test ./... -run '^$'
 
 build:
-  GOCACHE="$PWD/.local/go-build" GOMODCACHE="$PWD/.local/go-mod" go build ./...
+  mkdir -p .local/bin
+  GOCACHE="$PWD/.local/go-build" GOMODCACHE="$PWD/.local/go-mod" go build -o .local/bin/app .
 
 test target="./...":
   GOCACHE="$PWD/.local/go-build" GOMODCACHE="$PWD/.local/go-mod" go test {{target}}

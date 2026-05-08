@@ -10,12 +10,20 @@ static: lint
 
 test:
   scripts/run_jj_workflow_lab.sh
+  scripts/run_tag_dependency_typescript_lab.sh
+  scripts/run_language_profile_labs.sh
 
 workflow-lab:
   scripts/run_jj_workflow_lab.sh
 
 tag-dependency-dry-run:
   scripts/run_tag_dependency_agent_dry_run.sh
+
+tag-dependency-live-lab:
+  scripts/run_tag_dependency_typescript_lab.sh
+
+language-profile-labs:
+  scripts/run_language_profile_labs.sh
 
 integration-live:
   scripts/run_jj_github_integration_lab.sh

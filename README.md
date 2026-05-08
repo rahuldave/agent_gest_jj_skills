@@ -33,6 +33,11 @@ Gest workflow concepts but changes the VCS contract:
   tutorial trace, and deletes the repos with `gh repo delete --yes`.
 - `scripts/run_tag_dependency_agent_dry_run.sh`: local agent dry run for tag
   classification plus `ast-grep` dependency expansion.
+- `scripts/run_tag_dependency_typescript_lab.sh`: live local TypeScript lab for
+  Gest tag-based dependency expansion plus `ast-grep` call-site expansion under
+  a colocated jj/git repo.
+- `scripts/run_language_profile_labs.sh`: live local end-to-end setup labs for
+  the Python/UV, TypeScript/NPM, Go, and Rust/Cargo profiles under jj.
 - `tools/gest_mermaid_graph.py`: optional Gest graph exporter.
 - `templates/`: reusable setup snippets for language/profile setup.
 
@@ -120,7 +125,8 @@ just verify
 
 `just verify` checks repository shape, shell syntax, hook JSON, hook guardrail
 behavior, the four disposable jj workflow lab situations, the tag/dependency
-agent dry run, jj-stack installation, and diff hygiene. The lab uses a local
+agent dry run, the live TypeScript tag/ast-grep lab, the four language profile
+labs, jj-stack installation, and diff hygiene. The workflow lab uses a local
 bare remote by default to prove bookmark push mechanics without creating a
 GitHub repo. Live `jj-stack` PR submission remains gated by GitHub remote/auth
 prerequisites.

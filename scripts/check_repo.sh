@@ -25,6 +25,8 @@ required_files=(
   "scripts/run_jj_workflow_lab.sh"
   "scripts/run_jj_github_integration_lab.sh"
   "scripts/run_tag_dependency_agent_dry_run.sh"
+  "scripts/run_tag_dependency_typescript_lab.sh"
+  "scripts/run_language_profile_labs.sh"
   "templates/README.md"
   "tools/gest_mermaid_graph.py"
 )
@@ -68,23 +70,49 @@ required_text=(
   "jj-stack stacked PRs"
   "parallel jj workspaces"
   "Tags And ast-grep Dependency Check"
-  "Latest Live Run"
-  "live_jj_tutorial_transcript_2026-05-07.md"
+  "Pull Request Command Map"
   "Successfully submitted stack"
   "gh repo delete --yes"
+  "Accept And Merge The Tutorial PRs"
+  "PR acceptance checkpoint"
+  "gh pr diff <number> --patch"
+  "gh pr checks <number>"
+  "gh pr merge <number> --merge --delete-branch"
+  "state MERGED"
+  "existing-tags.txt"
+  "new dynamic tags: none"
+  "vocabulary source"
   "After the agent finishes, check:"
   "classification.tags.reviewed"
   "impact.ast_grep.required"
   "count-or-probability-coloring"
   "probability-pill-colors"
   "tag-dependency-dry-run"
+  "tag-dependency-live-lab"
   "ast-grep run"
+  "Live TypeScript Tag And ast-grep Dependency Lab"
+  "tag dependency expansion"
+  "ast-grep dependency expansion"
+  "run_tag_dependency_typescript_lab.sh"
   "jj workspace add"
+  "run_language_profile_labs.sh"
+  "language-profile-labs"
+  "live local end-to-end"
+  "Python With UV"
+  "TypeScript With NPM"
+  "Rust With Cargo"
 )
 
 for needle in "${required_text[@]}"; do
-  if ! grep -R "$needle" "$repo_root/AGENTS.template.md" "$repo_root/docs" "$repo_root/.agents/skills" >/dev/null; then
+  if ! grep -R "$needle" "$repo_root/AGENTS.template.md" "$repo_root/README.md" "$repo_root/docs" "$repo_root/.agents/skills" "$repo_root/scripts" >/dev/null; then
     echo "missing required jj workflow text: $needle" >&2
+    exit 1
+  fi
+done
+
+for stale_tutorial_text in "Latest Live Run" "live_jj_tutorial_transcript"; do
+  if grep -q "$stale_tutorial_text" "$repo_root/docs/TUTORIAL.md"; then
+    echo "stale run-specific text remains in docs/TUTORIAL.md: $stale_tutorial_text" >&2
     exit 1
   fi
 done
