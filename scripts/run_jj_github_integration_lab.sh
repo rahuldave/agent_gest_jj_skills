@@ -92,6 +92,7 @@ mkdir -p "$logs_dir"
 
 require_command git
 require_command gh
+require_command jq
 require_command jj
 require_command just
 
@@ -156,7 +157,7 @@ make_repo() {
 
   (
     cd "$dir"
-    log_cmd git init
+    log_cmd git -c init.defaultBranch=main init
     log_cmd gh repo create "$full_repo" "--$visibility" --source=. --remote=origin --disable-issues --disable-wiki
     log_cmd jj git init --colocate
   )
@@ -180,6 +181,35 @@ init_main() {
 verify_main_tracking() {
   jj bookmark list --all | grep -A2 '^main:' | grep -q '@origin' ||
     die "expected main to have @origin tracking"
+}
+
+review_and_merge_pr() {
+  local full_repo="$1"
+  local selector="$2"
+  local number
+  local checks_json
+  local failed_checks
+  local state
+
+  number="$(gh pr view "$selector" --repo "$full_repo" --json number --jq .number)"
+  log_cmd gh pr view "$number" --repo "$full_repo" --json number,url,state,mergeable,headRefName,baseRefName
+  log_cmd gh pr diff "$number" --repo "$full_repo" --patch
+  printf '\n$ gh pr checks %q --repo %q\n' "$number" "$full_repo"
+  if ! checks_json="$(gh pr checks "$number" --repo "$full_repo" --json name,state 2>&1)"; then
+    if printf '%s\n' "$checks_json" | grep -q 'no checks reported'; then
+      printf '%s\n' "$checks_json"
+    else
+      printf '%s\n' "$checks_json" >&2
+      return 1
+    fi
+  else
+    printf '%s\n' "$checks_json"
+    failed_checks="$(printf '%s\n' "$checks_json" | jq '[.[] | select(.state != "SUCCESS" and .state != "SKIPPED" and .state != "NEUTRAL")] | length')"
+    [ "$failed_checks" = "0" ] || die "expected no failing PR checks for $number"
+  fi
+  log_cmd gh pr merge "$number" --repo "$full_repo" --merge --delete-branch
+  state="$(gh pr view "$number" --repo "$full_repo" --json state --jq .state)"
+  [ "$state" = "MERGED" ] || die "expected PR $number to be MERGED, got $state"
 }
 
 run_flow() {
@@ -225,6 +255,7 @@ flow_plain_bookmark() {
   log_cmd jj git push --bookmark demo/plain-bookmark
   log_cmd gh pr create --repo "$full_repo" --base main --head demo/plain-bookmark --title "test: plain bookmark flow" --body "Live jj plain bookmark flow."
   log_cmd gh pr view demo/plain-bookmark --repo "$full_repo" --json number,url,state,mergeable,headRefName,baseRefName
+  review_and_merge_pr "$full_repo" demo/plain-bookmark
 }
 
 flow_multi_commit() {
@@ -248,6 +279,7 @@ flow_multi_commit() {
   [ "$count" -ge 2 ] || die "expected at least two commits in multi-commit flow"
   log_cmd gh pr create --repo "$full_repo" --base main --head demo/session-bookmark --title "test: multi-commit bookmark flow" --body "Live jj multi-commit bookmark flow."
   log_cmd gh pr view demo/session-bookmark --repo "$full_repo" --json number,url,state,mergeable,headRefName,baseRefName,commits
+  review_and_merge_pr "$full_repo" demo/session-bookmark
 }
 
 flow_lazyjj_stack() {
@@ -278,6 +310,8 @@ flow_lazyjj_stack() {
   log_cmd gh pr list --repo "$full_repo" --state open --json number,url,title,headRefName,baseRefName
   pr_count="$(gh pr list --repo "$full_repo" --state open --json number --jq 'length')"
   [ "$pr_count" -eq 2 ] || die "expected two stacked PRs, got $pr_count"
+  review_and_merge_pr "$full_repo" demo/stack-child
+  review_and_merge_pr "$full_repo" demo/stack-base
 }
 
 flow_jj_workspaces() {
@@ -303,6 +337,7 @@ flow_jj_workspaces() {
     log_cmd jj bookmark set demo/workspace-a -r @-
     log_cmd jj git push --bookmark demo/workspace-a
     log_cmd gh pr create --repo "$full_repo" --base main --head demo/workspace-a --title "test: workspace a flow" --body "Live jj workspace A flow."
+    review_and_merge_pr "$full_repo" demo/workspace-a
   )
 
   (
@@ -312,12 +347,13 @@ flow_jj_workspaces() {
     log_cmd jj bookmark set demo/workspace-b -r @-
     log_cmd jj git push --bookmark demo/workspace-b
     log_cmd gh pr create --repo "$full_repo" --base main --head demo/workspace-b --title "test: workspace b flow" --body "Live jj workspace B flow."
+    review_and_merge_pr "$full_repo" demo/workspace-b
   )
 
   log_cmd jj log -r 'description("workspace a") | description("workspace b")' --no-pager
-  log_cmd gh pr list --repo "$full_repo" --state open --json number,url,title,headRefName,baseRefName
-  pr_count="$(gh pr list --repo "$full_repo" --state open --json number --jq 'length')"
-  [ "$pr_count" -eq 2 ] || die "expected two workspace PRs, got $pr_count"
+  log_cmd gh pr list --repo "$full_repo" --state merged --json number,url,title,headRefName,baseRefName,state
+  pr_count="$(gh pr list --repo "$full_repo" --state merged --json number --jq 'length')"
+  [ "$pr_count" -eq 2 ] || die "expected two merged workspace PRs, got $pr_count"
   log_cmd jj workspace forget live-workspace-a
   log_cmd jj workspace forget live-workspace-b
 }

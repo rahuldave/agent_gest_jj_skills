@@ -9,7 +9,7 @@ workspace_b="$lab-workspace-b"
 
 rm -rf "$lab" "$remote" "$workspace_a" "$workspace_b"
 mkdir -p "$lab"
-git init --bare "$remote" >/dev/null
+git -c init.defaultBranch=main init --bare "$remote" >/dev/null
 cd "$lab"
 
 jj git init --colocate >/dev/null

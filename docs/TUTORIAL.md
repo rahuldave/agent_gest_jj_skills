@@ -2,6 +2,8 @@
 
 This tutorial creates four temporary GitHub repositories with fixed names, runs
 four jj agent workflows, and tells you exactly what to check after each turn.
+The pull-request steps create PRs first, then a later merge step reviews and
+merges those PRs before cleanup deletes the temporary repositories.
 
 You will learn:
 
@@ -14,23 +16,19 @@ You will learn:
 Only step 3 uses jj-stack as the main PR submission tool. GitButler is not used
 in this tutorial.
 
-## Latest Live Run
+## Pull Request Command Map
 
-This tutorial was rerun against live temporary GitHub repositories on
-2026-05-07. The historical transcript is
-`docs/live_jj_tutorial_transcript_2026-05-07.md`.
+This tutorial uses these PR creation commands:
 
-Observed results:
+- Step 1: `gh pr create --base main --head tutorial/plain-bookmark`
+- Step 2: `gh pr create --base main --head tutorial/multi-bookmark`
+- Step 3: `jst submit tutorial/stack-child`
+- Step 4: `gh pr create --base main --head tutorial/workspace-a` and
+  `gh pr create --base main --head tutorial/workspace-b`
 
-- Step 1 used a jj bookmark and opened `tutorial/plain-bookmark` into `main`.
-- Step 2 used one jj bookmark at the top of a two-commit chain and opened it
-  into `main`.
-- Step 3 used LazyJJ aliases plus `jst submit tutorial/stack-child`; `jj-stack`
-  created both stacked PRs with `tutorial/stack-base -> main` and
-  `tutorial/stack-child -> tutorial/stack-base`.
-- Step 4 used two jj workspaces and opened two independent PRs into `main`.
-- Cleanup deleted all four temporary GitHub repositories with
-  `gh repo delete --yes`.
+For stacked PRs, submit the top stack bookmark with `jst submit`. `jj-stack`
+walks the bookmark stack and creates or updates the lower PR first, so one
+command creates both the base and child PRs with the correct targets.
 
 ## What This Tutorial Will Do
 
@@ -84,8 +82,9 @@ Before starting, delete any existing GitHub repos with those names using
 Create a local tutorial root at `/tmp/agent-gest-jj-tutorial`.
 Create `/tmp/agent-gest-jj-tutorial/logs`.
 
-For each following step, write a command log in that logs directory. After all
-steps finish, delete the four GitHub repos unless I explicitly ask to keep them.
+For each following step, write a command log in that logs directory. After the
+PR-opening steps finish, merge the PRs in Step 6. After the merge step, delete
+the four GitHub repos unless I explicitly ask to keep them.
 ```
 
 After the agent finishes, check:
@@ -414,57 +413,109 @@ run ast-grep against the semantic contract that is changing. If another surface
 depends on that contract, the agent should expand the task or create a tagged
 child task before implementation.
 
+This is a live local TypeScript repo lab in a colocated jj/git repository. It
+demonstrates two different dependency signals:
+
+- tag dependency: Gest tasks already tagged with the same semantic concern
+- ast-grep dependency: TypeScript call sites that use the changing function
+
 Local fixture:
 
 ```text
-/tmp/agent-gest-jj-tutorial/tag-ast-grep
+/tmp/agent-gest-jj-tutorial/tag-ast-grep-live
+```
+
+If you are running from this reusable skills repository, this command performs
+the whole step:
+
+```bash
+scripts/run_tag_dependency_typescript_lab.sh \
+  /tmp/agent-gest-jj-tutorial/tag-ast-grep-live \
+  /tmp/agent-gest-jj-tutorial/logs/05-tag-ast-grep.log
 ```
 
 Ask the agent:
 
 ```text
-Run tutorial step 5: tag classification and ast-grep dependency check.
+Run tutorial step 5: live TypeScript tag and ast-grep dependency lab.
 
-Create `/tmp/agent-gest-jj-tutorial/tag-ast-grep/src`.
+Create or replace `/tmp/agent-gest-jj-tutorial/tag-ast-grep-live`.
+Initialize it as a git repo, colocated jj repo, and local Gest project.
+Create `/tmp/agent-gest-jj-tutorial/logs/05-tag-ast-grep.log`.
 
-Create `src/colors.js` containing a function named
-`countOrProbabilityColorScale`.
-Create `src/histogram.js` that calls `countOrProbabilityColorScale`.
-Create `src/pill.js` that calls `countOrProbabilityColorScale`.
+In Gest, create these existing tasks and tags:
+
+- `Shared count/probability color contract`
+  - tags: `count-or-probability-coloring`, `design`
+- `Render histogram bin colors`
+  - tags: `count-or-probability-coloring`, `histogram-colors`
+- `Render probability pill colors`
+  - tags: `count-or-probability-coloring`, `probability-pill-colors`
+- `Polish reader hover affordance`
+  - tags: `reader-ui`
+
+Collect the existing tag vocabulary from Gest before choosing tags:
+
+```bash
+gest task list --all --json
+gest artifact list --all --json
+gest iteration list --all --json
+```
+
+Create a small TypeScript project with:
+
+- `src/colors.ts`, exporting `countOrProbabilityColorScale`
+- `src/histogram.ts`, calling `countOrProbabilityColorScale`
+- `src/pill.ts`, calling `countOrProbabilityColorScale`
+- `src/readerHover.ts`, not calling `countOrProbabilityColorScale`
+
+Run `npm install` and `npm exec -- tsc --noEmit`.
 
 Before editing anything, classify the requested change "change histogram colors
-for low-count bins" with these tags:
+for low-count bins" against the Gest vocabulary:
+
 - selected existing tag: `count-or-probability-coloring`
 - selected existing tag: `histogram-colors`
 - selected existing tag: `probability-pill-colors`
 - rejected near miss: `reader-ui`
+- new dynamic tags: none
 
 Then run:
 
-`ast-grep run --lang javascript --pattern 'countOrProbabilityColorScale($$$)' --json=compact src`
+```bash
+ast-grep run \
+  --lang typescript \
+  --pattern 'countOrProbabilityColorScale($$$)' \
+  --json=compact \
+  src
+```
 
-The dependency impact should find both:
-- `src/histogram.js`
-- `src/pill.js`
+The tag dependency expansion should show the histogram and probability-pill
+tasks are linked by `count-or-probability-coloring`. The ast-grep dependency
+expansion should find both `src/histogram.ts` and `src/pill.ts`, and it should
+not match `src/readerHover.ts`.
 
-Do not change the fixture in this step. Write the selected tags, rejected tag,
-ast-grep command, and dependency-impact conclusion to
-`/tmp/agent-gest-jj-tutorial/logs/05-tag-ast-grep.log`.
+Write the selected tags, rejected tag, new-tag decision, tag-linked work,
+ast-grep command, matched files, non-matched reader file, and dependency-impact
+conclusion to `/tmp/agent-gest-jj-tutorial/logs/05-tag-ast-grep.log`.
 ```
 
 After the agent finishes, check:
 
 ```bash
-rg "count-or-probability-coloring|histogram.js|pill.js|reader-ui" \
+rg "tag dependency expansion|ast-grep dependency expansion|count-or-probability-coloring|src/histogram.ts|src/pill.ts|src/readerHover.ts|reader-ui" \
   /tmp/agent-gest-jj-tutorial/logs/05-tag-ast-grep.log
 ```
 
 Expected:
 
 ```text
+tag dependency expansion
+ast-grep dependency expansion
 count-or-probability-coloring
-histogram.js
-pill.js
+src/histogram.ts
+src/pill.ts
+src/readerHover.ts
 reader-ui
 ```
 
@@ -472,7 +523,117 @@ The agent should report that a histogram-color implementation must also account
 for the probability-pill color surface, or create a child task tagged with the
 same semantic dependency before completion.
 
-## Step 6: Cleanup
+Commands it should have used:
+
+- `gest task list --all --json`, `gest artifact list --all --json`, and
+  `gest iteration list --all --json` before choosing tags
+- `npm install` and `npm exec -- tsc --noEmit`
+- `ast-grep run --lang typescript --pattern 'countOrProbabilityColorScale($$$)'`
+
+Commands it should not have used:
+
+- invented "existing" tags without first collecting a Gest tag vocabulary
+- raw string-only dependency search as the primary check when `ast-grep` is
+  available for the language
+
+## Step 6: Accept And Merge The Tutorial PRs
+
+What this step teaches:
+
+Opening PRs is not the end of a durable checkpoint. Review and accept each PR
+before merging, then merge the PRs before cleanup so branch deletion, PR state,
+and stacked-PR ordering are exercised.
+
+Ask the agent:
+
+```text
+Run tutorial step 6: accept and merge tutorial PRs.
+
+Use my GitHub account from `gh api user -q .login`.
+
+Before merging, record each PR number with `gh pr view <branch> --json number`.
+For each PR, run the PR acceptance checkpoint first:
+
+- inspect `gh pr view <number> --json number,url,state,isDraft,title,body,headRefName,baseRefName,mergeable,reviewDecision,commits,files,statusCheckRollup,latestReviews`
+- inspect `gh pr diff <number> --patch`
+- inspect `gh pr checks <number>`, treating "no checks reported" as an
+  explicit state to report, not as a silent pass
+- report findings first
+- report PR state, checks, branch/base, mergeability, and the exact merge
+  recommendation
+- stop and ask before merging if there are findings, mergeability is not clean,
+  or the PR target/bookmark shape is not the expected tutorial shape
+
+Then merge these PRs with `gh pr merge <number> --merge --delete-branch`, and
+verify each PR state is `MERGED` by PR number:
+
+- repo `agent-gest-jj-tutorial-plain`, PR bookmark `tutorial/plain-bookmark`
+- repo `agent-gest-jj-tutorial-multi`, PR bookmark `tutorial/multi-bookmark`
+- repo `agent-gest-jj-tutorial-workspaces`, PR bookmark `tutorial/workspace-a`
+- repo `agent-gest-jj-tutorial-workspaces`, PR bookmark `tutorial/workspace-b`
+
+For repo `agent-gest-jj-tutorial-stack`, merge in this order:
+
+1. merge PR bookmark `tutorial/stack-child` into `tutorial/stack-base`
+2. merge PR bookmark `tutorial/stack-base` into `main`
+
+Write all commands and key outputs to
+`/tmp/agent-gest-jj-tutorial/logs/06-merge-prs.log`.
+```
+
+After the agent finishes, check:
+
+```bash
+owner="$(gh api user -q .login)"
+
+gh pr list \
+  --repo "$owner/agent-gest-jj-tutorial-plain" \
+  --state merged \
+  --search "head:tutorial/plain-bookmark" \
+  --json state,baseRefName,headRefName,title
+
+gh pr list \
+  --repo "$owner/agent-gest-jj-tutorial-multi" \
+  --state merged \
+  --search "head:tutorial/multi-bookmark" \
+  --json state,baseRefName,headRefName,title
+
+gh pr list \
+  --repo "$owner/agent-gest-jj-tutorial-stack" \
+  --state merged \
+  --json title,baseRefName,headRefName
+
+gh pr list \
+  --repo "$owner/agent-gest-jj-tutorial-workspaces" \
+  --state merged \
+  --json title,baseRefName,headRefName
+```
+
+Expected:
+
+```text
+plain PR: state MERGED, baseRefName main, headRefName tutorial/plain-bookmark
+multi PR: state MERGED, baseRefName main, headRefName tutorial/multi-bookmark
+stack child PR: state MERGED, baseRefName tutorial/stack-base
+stack base PR: state MERGED, baseRefName main
+workspace A PR: state MERGED, baseRefName main
+workspace B PR: state MERGED, baseRefName main
+```
+
+Commands it should have used:
+
+- `gh pr view <bookmark> --json number` before deleting PR bookmarks
+- `gh pr view <number> --json ...`, `gh pr diff <number> --patch`, and
+  `gh pr checks <number>` as the PR acceptance checkpoint before merging
+- `gh pr merge <number> --merge --delete-branch`
+- `gh pr view` or `gh pr list --state merged`
+
+Commands it should not have used:
+
+- deleting the temporary repositories before PR state is verified as `MERGED`
+- deleting stacked bookmarks before the child and base stack PRs are merged
+
+## Step 7: Cleanup
 
 Ask the agent:
 
