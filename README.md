@@ -166,4 +166,7 @@ jj git push --bookmark main
 ```
 
 Create/update pull requests with `jj-stack` or direct `gh` commands after a
-bookmark is pushed. Do not merge without explicit approval.
+bookmark is pushed. For reviewable non-local work, create/move and push the
+bookmark instead of stopping in a local-only state. Do not merge without
+explicit approval. After merging, run any deploy/release command defined by the
+target repository's instructions, or report the exact blocker.

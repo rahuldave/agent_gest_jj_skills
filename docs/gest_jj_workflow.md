@@ -194,8 +194,16 @@ jst submit <top-bookmark> --dry-run
 jst submit <top-bookmark>
 ```
 
+For reviewable non-local work, create or move the bookmark and push it unless
+the user explicitly requested local-only work or the push is blocked. Local
+bookmark state is not a completed checkpoint by itself.
+
 Run `gpa` after pushing a non-mainline bookmark and creating/updating a PR.
 Merge only with explicit user approval.
+
+After a PR is merged, inspect the repository's project instructions and command
+contract for deploy/release expectations. If the repo defines a deploy command
+for that kind of change, run it or record the exact blocker before handoff.
 
 ## Verification
 
