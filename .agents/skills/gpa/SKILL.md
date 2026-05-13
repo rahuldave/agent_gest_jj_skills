@@ -90,7 +90,14 @@ Findings first. Check:
 - missing tag classification or missing `ast-grep` dependency impact coverage
   for code-facing PRs
 
-If no findings exist, say so clearly and list residual risk.
+Treat `Findings: None` as a precise statement about blocking or actionable
+code-review findings, not as the whole PR review. If no findings exist, say so
+clearly and list residual risk.
+
+After findings, add reviewer judgment when it would help the user: call out
+non-blocking opinions about clarity, maintainability, UX, naming, fit with local
+patterns, bookmark/PR shape, or tradeoffs. Label these separately from findings
+so taste-level feedback does not look like a merge blocker.
 
 ## Acceptance Packet
 
@@ -101,6 +108,9 @@ Report:
 
 Findings:
 - None / <findings ordered by severity>
+
+Reviewer Notes:
+- <non-blocking opinions, maintainability/UX/readability judgment, or None>
 
 PR State:
 - PR: <url>

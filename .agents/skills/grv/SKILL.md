@@ -38,7 +38,9 @@ Review the task's tag classification and dependency impact notes from
 
 ## Review Checklist
 
-Findings first, ordered by severity, with file/line references:
+Findings first, ordered by severity, with file/line references. Treat
+`Findings: None` as a precise statement about blocking or actionable code-review
+findings, not as the whole review.
 
 - correctness, regressions, safety, error handling
 - missing tests for changed callable code or scripts
@@ -57,7 +59,13 @@ Findings first, ordered by severity, with file/line references:
 - dependent surfaces found by tags or ast-grep that were not updated, tested,
   or turned into follow-up tasks
 
-If no issues are found, say so clearly and mention residual risk or test gaps.
+After findings, add reviewer judgment when it would help the user: call out
+non-blocking opinions about clarity, maintainability, UX, naming, fit with local
+patterns, jj workflow shape, or tradeoffs. Label these separately from findings
+so taste-level feedback does not look like a merge blocker.
+
+If no issues are found, say so clearly, then still mention residual risk, test
+gaps, and any useful non-blocking observations.
 
 Missing focused tests for changed callable code, hooks, scripts, or public APIs
 are review findings, not just nice-to-have follow-ups.
