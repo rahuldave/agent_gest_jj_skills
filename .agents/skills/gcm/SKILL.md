@@ -131,6 +131,14 @@ jj status
 jj bookmark list --all
 ```
 
+For reviewable non-local work, create or move the bookmark and push it unless
+the user explicitly requested local-only work or the push is blocked. Local
+bookmark state is not a completed checkpoint by itself.
+
 If a non-mainline bookmark was pushed, create/update the PR, run `gpa`, report
 the PR state, and ask before merging unless the user explicitly requested merge
 in the current turn.
+
+After a PR is merged, check the repository's project instructions and command
+contract for deployment or release steps. If the repo defines a deploy command
+for this kind of change, run it or record the concrete blocker before handoff.

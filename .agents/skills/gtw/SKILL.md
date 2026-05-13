@@ -232,8 +232,12 @@ parents, completed iterations, and substantial handoffs:
   iterations
 - run `grv` after code changes before completing leaves
 - verify push state for Codex-created bookmarks/commits
+- if reviewable work has no pushed bookmark, create/move the bookmark and push
+  it instead of treating local-only state as the default
 - after pushing a non-mainline bookmark, create/update the PR, run `gpa`, and
   ask before merge unless the user already requested merge
+- after merging a PR, run the repo's deploy/release contract when applicable,
+  or report the exact reason deployment was skipped
 - report graph paths, commit/change IDs, bookmark/push status, review status,
   and GitHub issue decision
 

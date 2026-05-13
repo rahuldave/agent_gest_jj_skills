@@ -14,6 +14,11 @@ updates a PR. Report the acceptance packet and ask before approving, requesting
 changes, or merging unless the user explicitly asked for that action in the
 current turn.
 
+After a PR is merged, inspect the repository instructions and command contract
+for required deployment or release work. Run the applicable deploy/release step
+or report the concrete blocker; a merge alone is not a completed handoff when
+the project expects deployment.
+
 ## Inputs
 
 Accept a PR number, URL, bookmark/head name, or current bookmark PR. If no PR is

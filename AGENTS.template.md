@@ -241,10 +241,18 @@ jj bookmark set <bookmark> -r @-
 jj git push --bookmark <bookmark>
 ```
 
+For reviewable non-local work, create or move the bookmark and push it unless
+the user explicitly requested local-only work or the push is blocked. Local
+bookmark state is not a completed checkpoint by itself.
+
 After pushing a non-mainline bookmark, create/update the PR, run `gpa`, report
 the PR review findings/state to the user, and ask whether to merge. Do not merge
 unless the user explicitly asked for that merge in the current turn or gives
 approval after the `gpa` packet.
+
+After merging a PR, check the repository instructions and command contract for
+deployment or release steps. If the project defines a deploy/release command
+for the merged change, run it or record the exact blocker before handoff.
 
 ## Claude And Codex Hooks
 
