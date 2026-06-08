@@ -42,6 +42,12 @@ the request and child leaves for separately verifiable stages such as `gsp`,
 Serialize Gest commands. Local sync can make read-looking commands write to
 SQLite.
 
+Current forked Gest builds from June 8, 2026 and later prefer the project-local
+database at `.gest/gest.db` when the project has `.gest/` and no explicit
+`database.url` or `storage.data_dir` override. That path is normally inside the
+writable workspace, so ordinary Gest commands do not need sandbox escalation
+just to reach SQLite.
+
 ```bash
 gest search "<short phrase>" --all --json --limit 20
 gest task list --all --json
@@ -58,8 +64,11 @@ jj bookmark list --all
 jj git remote list
 ```
 
-If a Gest command reports a readonly or locked database, retry serialized with
-the required local approval. If jj needs to take the colocated git import/export
+Legacy or stock system Gest builds may still store the canonical database at
+`~/Library/Application Support/gest/gest.db`, outside sandbox writable roots.
+For those installations, if a Gest mutation or read-looking sync command reports
+a readonly database, retry serialized with the required local approval and a
+narrow `gest` approval. If jj needs to take the colocated git import/export
 lock, rerun the jj command with the needed local approval.
 
 ## Gest Memory Lookup
