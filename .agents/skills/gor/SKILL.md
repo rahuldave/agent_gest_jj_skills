@@ -23,6 +23,9 @@ gest project --json
    - single task: run `gim` locally
    - dependent tasks: run sequentially
    - independent writable tasks: create one jj workspace per task
+   - read-only review, test-design, and reconnaissance tasks: may use
+     sub-agents without separate jj workspaces when they do not write files or
+     mutate Gest
 4. Before dispatching a phase, confirm every task has had the tag
    classification pass from `docs/tag_dependency_workflow.md`. For code-facing
    tasks, make sure workers know which `ast-grep` dependency checks and
@@ -34,6 +37,25 @@ gest iteration next <id> --claim --agent <agent-name> --json
 ```
 
 Exit code 75 means no work is currently available.
+
+## Sub-Agent Roles
+
+Distinguish sub-agent roles before dispatch:
+
+- **write agents** implement code/docs and need isolated execution when running
+  concurrently.
+- **review agents** inspect diffs, tests, docs, VCS safety, or PR state and
+  return findings first.
+- **test-design agents** propose the smallest meaningful failing or
+  characterization tests before implementation.
+- **reconnaissance agents** map code, prior Gest memory, or dependency impact
+  without editing.
+
+Gest mutations, task completion, commit/bookmark/push decisions, and PR
+decisions should remain centralized unless a role is explicitly assigned those
+responsibilities. Writable sub-agents must have disjoint write scopes. In jj
+repos, concurrent writable work uses one jj workspace per writable task; do not
+use git worktrees.
 
 ## JJ Workspace Execution
 

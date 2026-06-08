@@ -95,6 +95,26 @@ Findings first. Check:
 - missing tag classification or missing `ast-grep` dependency impact coverage
   for code-facing PRs
 
+For non-trivial PRs, use adversarial review lenses. Delegate independent
+read-only lenses to review sub-agents when sub-agents are available, authorized,
+and useful; otherwise run the lenses explicitly yourself:
+
+- code behavior and regression risk
+- test adequacy, including whether new tests would fail on the old code
+- jj bookmark/workspace, stack, push, and merge safety
+- PR body and sanitized Gest context accuracy
+- docs, setup, command-contract, release, and deployment drift
+- security, privacy, data, browser/UI, or language/runtime risk when relevant
+
+Writable sub-agents still require separate jj workspaces. Gest mutations,
+approvals, merges, and post-merge bookkeeping should remain centralized unless
+deliberately assigned.
+
+For reusable workflow PRs, preserve adapter boundaries: bookmarks are not
+branches, bookmarks do not auto-advance, jj workspaces are not git worktrees,
+raw git writes remain forbidden, and GitButler stack guidance should not be
+copied into jj mechanics.
+
 Treat `Findings: None` as a precise statement about blocking or actionable
 code-review findings, not as the whole PR review. If no findings exist, say so
 clearly and list residual risk.
@@ -134,6 +154,13 @@ Gest Context:
 - Follow-ups:
 - GitHub metadata:
 - Graphs:
+
+Adversarial Review:
+- Code behavior:
+- Test adequacy:
+- Workflow/VCS safety:
+- Docs/setup/contract drift:
+- Residual risk:
 
 Recommendation:
 - approve/request changes/hold

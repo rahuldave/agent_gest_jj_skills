@@ -36,6 +36,31 @@ Review the task's tag classification and dependency impact notes from
 `docs/tag_dependency_workflow.md`. If code contracts changed, inspect the
 `ast-grep` patterns that were run and the dependers they found.
 
+For non-trivial changes, act as an adversarial review aggregator. Apply distinct
+review lenses, delegating them to independent read-only review sub-agents when
+sub-agents are available, authorized, and useful:
+
+- correctness and regression risk
+- test adequacy and missing edge cases
+- jj bookmark/workspace safety
+- docs, setup, and command-contract drift
+- security, privacy, or data safety when relevant
+- browser/UI behavior when relevant
+- language/runtime idioms when the project profile is known
+
+If sub-agents are not used, run the lenses explicitly yourself. Writable
+sub-agents still require separate jj workspaces. Gest mutations, task
+completion, commits/bookmarks/pushes, and PR decisions should remain
+centralized unless deliberately assigned.
+
+Test review should ask:
+
+- Would the new or changed test fail against the old code?
+- Does it assert behavior rather than implementation trivia?
+- Are semantic dependers and edge cases covered?
+- Does the test scope match the workflow kind, blast radius, and
+  `test.strategy`?
+
 ## Review Checklist
 
 Findings first, ordered by severity, with file/line references. Treat
@@ -58,6 +83,9 @@ findings, not as the whole review.
 - missing `ast-grep` dependency impact checks for changed code contracts
 - dependent surfaces found by tags or ast-grep that were not updated, tested,
   or turned into follow-up tasks
+- reusable workflow changes that collapse GitButler and jj semantics, describe
+  jj bookmarks as auto-advancing branches, allow raw git writes in jj repos, or
+  use git worktrees instead of jj workspaces
 
 After findings, add reviewer judgment when it would help the user: call out
 non-blocking opinions about clarity, maintainability, UX, naming, fit with local

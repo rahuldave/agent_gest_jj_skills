@@ -14,6 +14,21 @@ Keep three concepts separate:
 - **Execution model**: where agents are allowed to write, usually the current
   jj workspace or one jj workspace per independent task.
 
+Workflow mode, test strategy, review depth, and jj execution are separate axes:
+
+```text
+workflow.kind=session|development
+test.strategy=test-first|test-after|characterization-first|exploratory|no-test-needed
+test.scope=focused|regression|integration|browser|full
+review.depth=solo|adversarial|multi-agent
+language.profile=python|ruby|typescript|go|rust|mixed|unknown
+contract.source=agents-md|just-agent-contract|manual
+```
+
+Use these axes together. A small bookmark can be `session` and `test-first`.
+A development stack can begin `characterization-first` and then use test-first
+loops for individual leaves.
+
 The important jj shift is that workspaces share the same commit graph. A worker
 in a jj workspace does not produce a branch that must be merged back. Its
 commits are immediately part of the shared repo history. Cleanup removes the
@@ -73,6 +88,11 @@ classification.tags.reviewed=true|false
 classification.tags.new=<comma-separated-new-tags>
 impact.ast_grep.required=true|false
 impact.semantic_tags=<comma-separated-tags>
+test.strategy=test-first|test-after|characterization-first|exploratory|no-test-needed
+test.scope=focused|regression|integration|browser|full
+review.depth=solo|adversarial|multi-agent
+language.profile=python|ruby|typescript|go|rust|mixed|unknown
+contract.source=agents-md|just-agent-contract|manual
 ```
 
 ## Tag And Dependency Impact
@@ -106,6 +126,23 @@ separate jj workspaces.
 
 Use `gis` to create durable outline issues. Use `gim` for one concrete task.
 Use `gor` for phased iterations.
+
+## Testing And Review
+
+`gte` owns both test design and test execution. Use `test-first` for small,
+clear behavior changes and regressions; use `characterization-first` before
+risky refactors or semantic changes; use `exploratory` only when the testable
+boundary is not yet known, and record the later boundary.
+
+`grv` should act as an adversarial review aggregator for non-trivial changes.
+Review lenses include correctness, test adequacy, jj workflow safety,
+docs/setup drift, and relevant security, data, browser/UI, or language/runtime
+risk. Read-only review sub-agents can run without extra jj workspaces; writable
+sub-agents require one jj workspace per independent task.
+
+For reusable workflow changes, reviewers must preserve jj-specific semantics:
+bookmarks are not branches, bookmarks do not move automatically, jj workspaces
+are not git worktrees, and raw git write commands remain forbidden.
 
 ## JJ Execution
 

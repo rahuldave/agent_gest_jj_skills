@@ -14,6 +14,12 @@ Gest workflow concepts but changes the VCS contract:
 - use Claude hooks to translate Claude worktree isolation into jj workspaces
 - use Codex skills/scripts to own jj workspace orchestration
 
+Shared Gest concepts now stay orthogonal to the jj adapter: session versus
+development mode, test strategy (`test-first`, `characterization-first`,
+`test-after`, `exploratory`, or `no-test-needed`), review depth, language
+profile context, and optional dynamic `just agent-*` targets are chosen
+separately from jj bookmark/workspace mechanics.
+
 ## What Is Included
 
 - `.agents/skills/g*`: reusable Gest agent skills adapted for jj workflows.
