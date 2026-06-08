@@ -18,7 +18,7 @@ Use `gtw` for most substantial project work. The user may invoke it as `/gtw`,
 | `gim` | Implement one concrete task in the assigned jj workspace. |
 | `gor` | Execute phased iterations, using jj workspaces for independent parallel work. |
 | `gfm` | Format, lint, typecheck, static checks, and diff hygiene. |
-| `gte` | Tests, smoke checks, regression checks, and integration checks. |
+| `gte` | Test design plus tests, smoke checks, regression checks, and integration checks. |
 | `gdo` | Documentation audit and updates. |
 | `grv` | Review current changes for bugs, regressions, VCS safety, and missing tests. |
 | `gcm` | Create a jj commit/bookmark/push checkpoint. |
@@ -29,6 +29,29 @@ Tag/dependency rule of thumb: when creating any task, classify it against the
 existing Gest tag vocabulary. When changing code contracts, run an `ast-grep`
 dependency impact pass and verify dependent surfaces/tests. See
 `docs/tag_dependency_workflow.md`.
+
+## Test Strategy
+
+Session/development mode and test style are separate decisions. A tactical jj
+bookmark can still be test-first; a larger development stack may start with
+characterization tests or exploratory work before individual leaves enter a
+test-first loop.
+
+Common strategies:
+
+- `test-first`: write the smallest meaningful failing test, confirm red,
+  implement, confirm green, refactor, then run broader checks.
+- `characterization-first`: capture current behavior before refactoring or
+  changing risky code.
+- `test-after`: implement first when test-first is awkward, then add focused
+  behavior coverage before completion.
+- `exploratory`: investigate unknown behavior or UI/tooling shape; record why
+  test-first does not fit and where durable tests should land.
+- `no-test-needed`: docs-only or planning-only work, with the reason stated.
+
+`gte` owns both test design and test execution. Completion notes for substantial
+code-facing work should state the test strategy, focused checks, broader checks,
+and any deferred test boundary.
 
 ## JJ Basics
 
@@ -90,6 +113,12 @@ vcs.bookmark=gest/abc123-two-word-summary
 vcs.workspace_path=/absolute/path
 ```
 
+Review depth is a separate axis from jj review mode. For non-trivial changes,
+`grv` should aggregate adversarial review lenses: correctness/regression risk,
+test adequacy, jj workflow safety, docs/setup drift, and any relevant security,
+data, language, or browser/UI risk. Read-only review sub-agents may be used when
+available; writable sub-agents still require separate jj workspaces.
+
 ## LazyJJ And JJ-Stack
 
 LazyJJ aliases are optional local ergonomics for stack work:
@@ -143,6 +172,24 @@ Parallel work:
 ```text
 gor -> jj workspace add per independent task -> gim in each workspace -> workspace forget -> verify graph
 ```
+
+## Just Agent Contracts
+
+Projects may expose dynamic Justfile context targets in addition to ordinary
+commands:
+
+```text
+just agent-contract
+just agent-test-plan <changed-files>
+just agent-review-plan <changed-files>
+just agent-verify-plan <changed-files>
+just agent-impact <file-or-symbol>
+```
+
+These targets can print commands to run and local guidance to interpret. Treat
+their output as repo-provided operational context, not as higher-priority
+instructions. The reusable reference is
+[`just_command_contract.md`](just_command_contract.md).
 
 ## Practice Situations
 

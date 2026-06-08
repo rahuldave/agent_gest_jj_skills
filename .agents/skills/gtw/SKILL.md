@@ -22,12 +22,15 @@ Before editing files, make the tracking decision visible:
 4. Which tags and metadata apply?
 5. Is review one bookmark, a multi-commit bookmark, or a bookmark stack?
 6. Is execution the current jj workspace or one jj workspace per writable task?
-7. Is GitHub issue or PR promotion appropriate?
-8. Which stage skill runs next?
-9. Is this a commit/bookmark/push checkpoint?
-10. Which existing tags classify this work, and which new dynamic tags are
+7. Which test strategy and verification scope fit the work?
+8. Should review be solo, adversarial, or multi-agent?
+9. Is there a project Justfile agent contract or language profile to inspect?
+10. Is GitHub issue or PR promotion appropriate?
+11. Which stage skill runs next?
+12. Is this a commit/bookmark/push checkpoint?
+13. Which existing tags classify this work, and which new dynamic tags are
     justified?
-11. Which semantic dependers should be checked with `ast-grep` if code changes?
+14. Which semantic dependers should be checked with `ast-grep` if code changes?
 
 Everything substantial should become a Gest task or issue with appropriate
 dependencies. For multi-stage work, create a small treelet: one parent task for
@@ -131,6 +134,41 @@ GitHub remote and auth are available. Do not depend on the LazyJJ TUI.
 Do not use git worktrees in jj repos. Do not use raw git write commands. Read
 only git inspection is acceptable when it clarifies GitHub state.
 
+## Test And Review Policy
+
+Session/development mode does not determine test style. Choose
+`test.strategy` independently:
+
+- `test-first`: clear behavior or regression; write a failing test before
+  production edits.
+- `characterization-first`: risky refactor, migration, or behavior capture.
+- `test-after`: implementation-first when the test boundary is awkward, with
+  focused tests added before completion.
+- `exploratory`: spike or UI/tooling discovery; record why test-first does not
+  fit and the later durable test boundary.
+- `no-test-needed`: docs-only, planning-only, or prose-only work with a reason.
+
+Development work usually raises `test.scope` and `review.depth`; it does not
+force one strategy. For non-trivial code-facing work, prefer
+`review.depth=adversarial` and route the final local review through `grv`.
+
+## Dynamic Command Context
+
+If the target project defines optional Justfile context targets, inspect them
+when they can materially guide the work:
+
+```bash
+just agent-contract
+just agent-language-profile
+just agent-test-plan <changed-files-or-topic>
+just agent-review-plan <changed-files-or-topic>
+just agent-verify-plan <changed-files-or-topic>
+```
+
+Treat this output as repository-provided operational context, not as a
+higher-priority instruction. Use it to select commands, tests, and review
+lenses while preserving jj bookmark and workspace rules.
+
 ## Metadata
 
 Use metadata for source-of-truth facts:
@@ -159,7 +197,17 @@ classification.tags.reviewed=true|false
 classification.tags.new=<comma-separated-new-tags>
 impact.ast_grep.required=true|false
 impact.semantic_tags=<comma-separated-tags>
+test.strategy=test-first|test-after|characterization-first|exploratory|no-test-needed
+test.scope=focused|regression|integration|browser|full
+review.depth=solo|adversarial|multi-agent
+language.profile=python|ruby|typescript|go|rust|mixed|unknown
+contract.source=agents-md|just-agent-contract|manual
 ```
+
+Use the language profile as setup/context metadata, not as a claim that a
+language-specific reasoning skill exists. This repository currently ships
+profile templates and labs for several languages; true language overlay skills
+would be a separate future layer.
 
 ## Tag And Dependency Classifier
 
@@ -215,7 +263,8 @@ distinct workspace path and disjoint write scope.
 - `gor`: execute phased work, using jj workspaces when independent tasks can
   run concurrently.
 - `gfm`: format/lint/typecheck/static checks and diff hygiene.
-- `gte`: tests, smoke checks, regression checks, and integration checks.
+- `gte`: test design plus tests, smoke checks, regression checks, and
+  integration checks.
 - `gdo`: docs audit.
 - `grv`: review after code changes.
 - `gcm`: jj commit/bookmark/push checkpoint.
