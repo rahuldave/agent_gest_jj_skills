@@ -36,10 +36,10 @@
       {"name": "jj", "check": "jj --version"},
       {"name": "gest", "check": "gest --version"},
       {"name": "just", "check": "just --version"},
-      {"name": "uv", "check": "uv --version"},
-      {"name": "rsync", "check": "rsync --version"}
+      {"name": "uv", "check": "uv --version"}
     ],
     "optional": [
+      {"name": "rsync", "check": "rsync --version"},
       {"name": "gh", "check": "gh --version"},
       {"name": "jst", "check": "jst --help"},
       {"name": "ast-grep", "check": "ast-grep --version"},

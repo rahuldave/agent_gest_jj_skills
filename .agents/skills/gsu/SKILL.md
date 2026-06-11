@@ -75,7 +75,9 @@ commands that modify user-level state.
    manifests, lockfiles, CI configs, docs, tests, source directories, and app
    entrypoints.
 2. Initialize git/GitHub/jj only after confirming the desired repo root.
-3. Check required tools: `jj`, `git`, `gest`, `just`, `uv`, and `rsync`.
+3. Check required workflow tools: `jj`, `git`, `gest`, `just`, and `uv`.
+   Missing tools should be reported clearly without blocking skill
+   installation. Treat `rsync` as optional cleaner installer behavior.
    Check optional tools: `gh`, `jst`, LazyJJ aliases (`jj lazyjj`),
    `ast-grep`, `direnv`, `cx`, `node`, `npm`, and
    browser tools when the project needs them. Check `cx` only when the project
@@ -128,11 +130,12 @@ uv run python /Users/rahul/Projects/agent_skill_package_installer/skills/skill-p
 ```
 
 Require skill repos to declare their installer and executable prerequisites in
-`skill-package.json`. Installer scripts must check every required executable
-before copying files and mention optional executables that unlock extra flows.
-For this jj skill repo, required executables are `git`, `jj`, `gest`, `just`,
-`uv`, and `rsync`; optional executables include `gh`, `jst`, `ast-grep`,
-`direnv`, `cx`, `node`, and `npm`.
+`skill-package.json`. Installer scripts must report every required workflow
+executable without blocking the skill copy and mention optional executables that
+unlock extra flows. For this jj skill repo, required workflow executables are
+`git`, `jj`, `gest`, `just`, and `uv`; optional executables include `rsync`,
+`gh`, `jst`, `ast-grep`, `direnv`, `cx`, `node`, and `npm`. Runtime commands
+should re-check tools they actually need.
 
 When setup creates follow-up tasks, classify them against existing project tags
 using `docs/tag_dependency_workflow.md`. If setup changes shared tooling,

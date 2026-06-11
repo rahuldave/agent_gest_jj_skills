@@ -59,10 +59,11 @@ From this repository:
 scripts/install.sh /path/to/target/repo
 ```
 
-The installer preflights required executables before copying files: `git`,
-`jj`, `gest`, `just`, `uv`, and `rsync`. It also reports optional executables
-that unlock additional workflows: `gh`, `jst`, `ast-grep`, `direnv`, `cx`,
-`node`, and `npm`.
+The installer reports missing workflow executables and still copies the skill
+bundle: `git`, `jj`, `gest`, `just`, and `uv`. It also reports optional
+executables that unlock additional workflows or cleaner installs: `rsync`,
+`gh`, `jst`, `ast-grep`, `direnv`, `cx`, `node`, and `npm`. If `rsync` is
+missing, the installer uses a `cp` fallback.
 
 The installer copies:
 
@@ -115,10 +116,10 @@ Required:
 - `gest`
 - `just`
 - `uv`
-- `rsync`
 
 Recommended:
 
+- `rsync` for cleaner installer sync behavior
 - `gh` for GitHub issue/PR checks
 - `jj-stack` for stacked PR creation from jj bookmarks
 - LazyJJ aliases for personal local stack ergonomics
