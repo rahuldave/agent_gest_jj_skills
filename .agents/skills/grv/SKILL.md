@@ -36,9 +36,11 @@ Review the task's tag classification and dependency impact notes from
 `docs/tag_dependency_workflow.md`. If code contracts changed, inspect the
 `ast-grep` patterns that were run and the dependers they found.
 
-For non-trivial changes, act as an adversarial review aggregator. Apply distinct
-review lenses, delegating them to independent read-only review sub-agents when
-sub-agents are available, authorized, and useful:
+For non-trivial changes, act as an adversarial review aggregator. Default to
+independent read-only review sub-agents when sub-agents are available,
+authorized, and the lenses can be checked independently; skip sub-agents only
+when they are unavailable, unsafe, or overkill for a tiny change. Apply distinct
+review lenses:
 
 - correctness and regression risk
 - test adequacy and missing edge cases
@@ -86,6 +88,10 @@ findings, not as the whole review.
 - reusable workflow changes that collapse GitButler and jj semantics, describe
   jj bookmarks as auto-advancing branches, allow raw git writes in jj repos, or
   use git worktrees instead of jj workspaces
+- `cx` workflow changes that use `cx` for tests, lint, format, typecheck,
+  ordinary package-manager builds, or commands without durable file outputs;
+  miss real `--in` inputs or `--out` outputs; rely on missing producer/consumer
+  Just ordering; or ignore `.cx` in a way that hides future config
 
 After findings, add reviewer judgment when it would help the user: call out
 non-blocking opinions about clarity, maintainability, UX, naming, fit with local

@@ -95,9 +95,11 @@ Findings first. Check:
 - missing tag classification or missing `ast-grep` dependency impact coverage
   for code-facing PRs
 
-For non-trivial PRs, use adversarial review lenses. Delegate independent
-read-only lenses to review sub-agents when sub-agents are available, authorized,
-and useful; otherwise run the lenses explicitly yourself:
+For non-trivial PRs, use adversarial review lenses. Default to independent
+read-only review sub-agents when sub-agents are available, authorized, and the
+lenses can be checked independently; skip sub-agents only when they are
+unavailable, unsafe, or overkill for a tiny PR. Otherwise run the lenses
+explicitly yourself:
 
 - code behavior and regression risk
 - test adequacy, including whether new tests would fail on the old code
@@ -114,6 +116,11 @@ For reusable workflow PRs, preserve adapter boundaries: bookmarks are not
 branches, bookmarks do not auto-advance, jj workspaces are not git worktrees,
 raw git writes remain forbidden, and GitButler stack guidance should not be
 copied into jj mechanics.
+
+For `cx` workflow PRs, verify that `cx` is framed as incremental build/pipeline
+infrastructure, not testing. Review `cx` lines for complete `--in`/`--out`
+declarations, durable file outputs, producer/consumer Just ordering, and
+`.cx` runtime-state ignore rules that do not hide future config.
 
 Treat `Findings: None` as a precise statement about blocking or actionable
 code-review findings, not as the whole PR review. If no findings exist, say so

@@ -12,6 +12,7 @@ test:
   scripts/run_jj_workflow_lab.sh
   scripts/run_tag_dependency_typescript_lab.sh
   scripts/run_language_profile_labs.sh
+  scripts/run_cx_examples_lab.sh
 
 workflow-lab:
   scripts/run_jj_workflow_lab.sh
@@ -24,6 +25,9 @@ tag-dependency-live-lab:
 
 language-profile-labs:
   scripts/run_language_profile_labs.sh
+
+cx-examples-lab:
+  scripts/run_cx_examples_lab.sh
 
 integration-live:
   scripts/run_jj_github_integration_lab.sh

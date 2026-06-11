@@ -167,10 +167,11 @@ non-trivial changes. It should review through distinct lenses:
 - browser/UI behavior when relevant
 - language/runtime idioms when the profile is known
 
-When sub-agents are available and useful, these lenses may be delegated as
-independent read-only reviews. Writable sub-agents still require separate jj
-workspaces. If sub-agents are not used, Codex should apply the lenses
-explicitly. Gest mutations and checkpoint decisions should remain centralized
+Default to independent read-only review sub-agents when sub-agents are
+available, authorized, and the lenses can be checked independently. Writable
+sub-agents still require separate jj workspaces. If sub-agents are not used,
+Codex should apply the lenses explicitly and record why local review was
+sufficient. Gest mutations and checkpoint decisions should remain centralized
 unless deliberately assigned.
 
 For reusable workflow changes, reviewers must preserve adapter boundaries:

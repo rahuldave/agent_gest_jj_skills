@@ -116,8 +116,9 @@ vcs.workspace_path=/absolute/path
 Review depth is a separate axis from jj review mode. For non-trivial changes,
 `grv` should aggregate adversarial review lenses: correctness/regression risk,
 test adequacy, jj workflow safety, docs/setup drift, and any relevant security,
-data, language, or browser/UI risk. Read-only review sub-agents may be used when
-available; writable sub-agents still require separate jj workspaces.
+data, language, or browser/UI risk. Default to independent read-only review
+sub-agents when sub-agents are available, authorized, and the lenses can be
+checked independently; writable sub-agents still require separate jj workspaces.
 
 ## LazyJJ And JJ-Stack
 

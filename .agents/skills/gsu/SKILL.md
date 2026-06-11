@@ -34,6 +34,7 @@ Identify which concepts apply:
 - integration tests
 - smoke checks
 - browser/UI verification
+- incremental build or artifact pipeline
 - database/migration checks
 - API docs
 - user docs
@@ -75,8 +76,9 @@ commands that modify user-level state.
    entrypoints.
 2. Initialize git/GitHub/jj only after confirming the desired repo root.
 3. Check required tools: `jj`, `git`, `gh`, `gest`, and `just`. Check optional
-   tools: `jst`, LazyJJ aliases (`jj lazyjj`), `ast-grep`, `direnv`, and
-   browser tools when the project needs them.
+   tools: `jst`, LazyJJ aliases (`jj lazyjj`), `ast-grep`, `direnv`, `cx`, and
+   browser tools when the project needs them. Check `cx` only when the project
+   has or wants explicit file-producing incremental build/pipeline stages.
 4. Infer likely project profiles:
    - Python: `pyproject.toml`, `uv.lock`, FastAPI, Django, Flask, pytest, ruff,
      ty, pyright, mypy.
@@ -84,6 +86,9 @@ commands that modify user-level state.
      Biome, TypeScript, Vitest, Jest, Playwright.
    - Rust: `Cargo.toml`, Cargo workspaces, clippy, rustfmt, rustdoc.
    - Go: `go.mod`, `go.sum`, Go toolchain commands.
+   - C/C++ or native build: `Makefile`, `CMakeLists.txt`,
+     `compile_commands.json`, `src/*.c`, `src/*.cc`, `include/`, object files,
+     custom compile/link recipes.
 5. Ask the smallest necessary question when multiple plausible tools exist or
    the choice affects committed files.
 6. Create/update ignore rules for generated files, local environments, caches,
@@ -182,6 +187,7 @@ gest --version
 just --version
 jst --help
 direnv version
+cx --help
 ```
 
 Use project-local dependency state and version pins where possible:
@@ -196,6 +202,43 @@ Use project-local dependency state and version pins where possible:
 
 Do not silently rely on ambient global tools when the project contract says a
 local toolchain is required.
+
+## cx Incremental Build And Pipeline Setup
+
+`cx` is for incremental builds and file-artifact pipelines in linewise Just
+recipes. It is not a test runner. Use it only when a command reads explicit
+files and writes durable output files.
+
+Good setup candidates:
+
+- ML/AI or data pipelines with intermediate artifacts, such as raw data to
+  features to model to report.
+- Generated artifact workflows where schemas, prompts, scripts, or configs
+  produce generated files.
+- Document, book, image, audio, or data conversion pipelines.
+- Hand-written C/C++ compile/link recipes with object files and binaries as
+  explicit outputs.
+
+Do not add `cx` for tests, lint, format, typecheck, browser checks, ordinary
+`cargo build`, `go build`, `tsc`, or commands without durable file outputs.
+Those stay ordinary project command-contract targets.
+
+When adding `cx`:
+
+- keep Just recipe dependencies for recipe ordering;
+- wrap only individual file-producing command lines with
+  `cx --in ... --out ... -- COMMAND ...`;
+- include scripts, schemas, prompts, config, and parameter files in `--in`
+  when they affect outputs;
+- add `cx lint` or `just cx-lint` to the static/check contract when useful;
+- ignore `.cx/state.json`, `.cx/graph.json`, and `.cx/tmp/`, but leave
+  `.cx/config.toml` committable unless the project decides otherwise;
+- verify the pipeline/build by running once, running again to observe
+  `up-to-date`, then changing one input and confirming the expected downstream
+  artifacts rerun.
+
+For reusable examples, read `docs/cx_incremental_pipelines.md` and run
+`just cx-examples-lab` in this skill repository.
 
 ## Browser Setup
 
