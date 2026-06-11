@@ -75,8 +75,9 @@ commands that modify user-level state.
    manifests, lockfiles, CI configs, docs, tests, source directories, and app
    entrypoints.
 2. Initialize git/GitHub/jj only after confirming the desired repo root.
-3. Check required tools: `jj`, `git`, `gh`, `gest`, and `just`. Check optional
-   tools: `jst`, LazyJJ aliases (`jj lazyjj`), `ast-grep`, `direnv`, `cx`, and
+3. Check required tools: `jj`, `git`, `gest`, `just`, `uv`, and `rsync`.
+   Check optional tools: `gh`, `jst`, LazyJJ aliases (`jj lazyjj`),
+   `ast-grep`, `direnv`, `cx`, `node`, `npm`, and
    browser tools when the project needs them. Check `cx` only when the project
    has or wants explicit file-producing incremental build/pipeline stages.
 4. Infer likely project profiles:
@@ -103,6 +104,35 @@ commands that modify user-level state.
 12. Run setup verification: tool discovery, `just --list`, cheap static checks,
     and representative focused command arguments.
 13. Record remaining setup gaps as Gest follow-ups.
+
+## Skill Repository Packaging
+
+When the target repository is itself a skill repository, look for
+`skill-package.json`, `skills/*/SKILL.md`, `.agents/skills/*/SKILL.md`, and
+`scripts/install.sh`. If the `skill-package-installer` skill is installed or
+available in the current source checkout, use it before declaring setup
+complete.
+
+Preferred checks:
+
+```bash
+uv run python .agents/skills/skill-package-installer/scripts/lint_skill_bundle.py .
+uv run python .agents/skills/skill-package-installer/scripts/render_package_plan.py .
+```
+
+If the skill is not installed in the target repo but the standalone checkout is
+available, use:
+
+```bash
+uv run python /Users/rahul/Projects/agent_skill_package_installer/skills/skill-package-installer/scripts/lint_skill_bundle.py .
+```
+
+Require skill repos to declare their installer and executable prerequisites in
+`skill-package.json`. Installer scripts must check every required executable
+before copying files and mention optional executables that unlock extra flows.
+For this jj skill repo, required executables are `git`, `jj`, `gest`, `just`,
+`uv`, and `rsync`; optional executables include `gh`, `jst`, `ast-grep`,
+`direnv`, `cx`, `node`, and `npm`.
 
 When setup creates follow-up tasks, classify them against existing project tags
 using `docs/tag_dependency_workflow.md`. If setup changes shared tooling,
@@ -185,6 +215,8 @@ git --version
 gh --version
 gest --version
 just --version
+uv --version
+rsync --version
 jst --help
 direnv version
 cx --help

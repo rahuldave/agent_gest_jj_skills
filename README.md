@@ -30,6 +30,8 @@ separately from jj bookmark/workspace mechanics.
 - `docs/TUTORIAL.md`: the deterministic beginner tutorial. Start here.
 - `docs/*.md`: reference docs and setup examples for users who need details.
 - `scripts/install.sh`: copy-based installer for target repos.
+- `skill-package.json`: package manifest used by `skill-package-installer` to
+  validate skills, installer scripts, and executable prerequisites.
 - `scripts/sync_g_skills.sh`: sync g skills, docs, templates, and optionally
   hook adapters into a target repo.
 - `scripts/check_repo.sh`: repository shape and hook syntax checks.
@@ -56,6 +58,11 @@ From this repository:
 ```bash
 scripts/install.sh /path/to/target/repo
 ```
+
+The installer preflights required executables before copying files: `git`,
+`jj`, `gest`, `just`, `uv`, and `rsync`. It also reports optional executables
+that unlock additional workflows: `gh`, `jst`, `ast-grep`, `direnv`, `cx`,
+`node`, and `npm`.
 
 The installer copies:
 
@@ -103,9 +110,12 @@ After installation:
 
 Required:
 
+- `git`
 - `jj`
 - `gest`
 - `just`
+- `uv`
+- `rsync`
 
 Recommended:
 
@@ -143,6 +153,10 @@ prerequisites.
 one explicit C incremental build. Use `cx` only for file-producing build or
 pipeline stages inside linewise Just recipes, not for tests or ordinary
 package-manager builds.
+
+When `gsu` is working on a skill repository and `skill-package-installer` is
+installed, it should run that skill's uv/Python linter against
+`skill-package.json` and installer prerequisite checks before handoff.
 
 For a real GitHub integration pass, run:
 
