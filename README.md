@@ -30,6 +30,8 @@ separately from jj bookmark/workspace mechanics.
 - `docs/TUTORIAL.md`: the deterministic beginner tutorial. Start here.
 - `docs/*.md`: reference docs and setup examples for users who need details.
 - `scripts/install.sh`: copy-based installer for target repos.
+- `skill-package.json`: package manifest used by `skill-package-installer` to
+  validate skills, installer scripts, and executable prerequisites.
 - `scripts/sync_g_skills.sh`: sync g skills, docs, templates, and optionally
   hook adapters into a target repo.
 - `scripts/check_repo.sh`: repository shape and hook syntax checks.
@@ -56,6 +58,12 @@ From this repository:
 ```bash
 scripts/install.sh /path/to/target/repo
 ```
+
+The installer reports missing workflow executables and still copies the skill
+bundle: `git`, `jj`, `gest`, `just`, and `uv`. It also reports optional
+executables that unlock additional workflows or cleaner installs: `rsync`,
+`gh`, `jst`, `ast-grep`, `direnv`, `cx`, `node`, and `npm`. If `rsync` is
+missing, the installer uses a `cp` fallback.
 
 The installer copies:
 
@@ -103,12 +111,15 @@ After installation:
 
 Required:
 
+- `git`
 - `jj`
 - `gest`
 - `just`
+- `uv`
 
 Recommended:
 
+- `rsync` for cleaner installer sync behavior
 - `gh` for GitHub issue/PR checks
 - `jj-stack` for stacked PR creation from jj bookmarks
 - LazyJJ aliases for personal local stack ergonomics
@@ -143,6 +154,13 @@ prerequisites.
 one explicit C incremental build. Use `cx` only for file-producing build or
 pipeline stages inside linewise Just recipes, not for tests or ordinary
 package-manager builds.
+
+When `gsu` is working on a skill repository and `skill-package-installer` is
+installed, it should run that skill's uv/Python linter against
+`skill-package.json` and installer-skill prerequisite checks before handoff. In
+an `npx skills` package, hooks and templates should be installed by the
+package's explicit installer skill after `npx skills add`, not as a hidden
+install side effect.
 
 For a real GitHub integration pass, run:
 
