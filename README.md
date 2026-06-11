@@ -44,6 +44,8 @@ separately from jj bookmark/workspace mechanics.
   a colocated jj/git repo.
 - `scripts/run_language_profile_labs.sh`: live local end-to-end setup labs for
   the Python/UV, TypeScript/NPM, Go, and Rust/Cargo profiles under jj.
+- `scripts/run_cx_examples_lab.sh`: live local examples for `cx` incremental
+  builds and file-artifact pipelines.
 - `tools/gest_mermaid_graph.py`: optional Gest graph exporter.
 - `templates/`: reusable setup snippets for language/profile setup.
 
@@ -136,6 +138,11 @@ labs, jj-stack installation, and diff hygiene. The workflow lab uses a local
 bare remote by default to prove bookmark push mechanics without creating a
 GitHub repo. Live `jj-stack` PR submission remains gated by GitHub remote/auth
 prerequisites.
+
+`just cx-examples-lab` runs two `cx` examples: one staged artifact pipeline and
+one explicit C incremental build. Use `cx` only for file-producing build or
+pipeline stages inside linewise Just recipes, not for tests or ordinary
+package-manager builds.
 
 For a real GitHub integration pass, run:
 

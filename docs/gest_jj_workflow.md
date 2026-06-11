@@ -137,7 +137,8 @@ boundary is not yet known, and record the later boundary.
 `grv` should act as an adversarial review aggregator for non-trivial changes.
 Review lenses include correctness, test adequacy, jj workflow safety,
 docs/setup drift, and relevant security, data, browser/UI, or language/runtime
-risk. Read-only review sub-agents can run without extra jj workspaces; writable
+risk. Default to independent read-only review sub-agents when sub-agents are
+available, authorized, and the lenses can be checked independently. Writable
 sub-agents require one jj workspace per independent task.
 
 For reusable workflow changes, reviewers must preserve jj-specific semantics:

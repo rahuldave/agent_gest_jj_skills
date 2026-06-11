@@ -42,6 +42,11 @@ Use raw git only for read-only inspection or for a command-contract diff check
 that intentionally validates the colocated git patch. Do not use raw git write
 commands or git worktrees.
 
+If the project uses `cx` in its Justfile, run `cx lint` or the mapped
+`just cx-lint` target as a static declaration check. `cx lint` validates
+incremental build/pipeline lines; it is not a test runner and should not be
+used as a substitute for `gte`.
+
 For code-facing changes, `gfm` may include lightweight `ast-grep` syntax or
 pattern checks from `docs/tag_dependency_workflow.md` when those checks are part
 of the mechanical contract.

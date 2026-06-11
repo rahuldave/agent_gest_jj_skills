@@ -49,6 +49,34 @@ Just is a command runner, not a file-freshness build system. Prefer native
 dependencies such as `verify: lint test diff-check` over recursively invoking
 `just` inside a recipe.
 
+## Incremental Builds And Pipelines
+
+Use `cx` when a project has explicit file-producing build or pipeline stages
+inside linewise Just recipes. `cx` is not for tests. It adds command-line
+incrementality to a single stage while `just` still owns recipe ordering.
+
+Good fits include ML/AI pipelines, conversion pipelines, generated artifacts,
+and hand-written C/C++ compile/link flows. Poor fits include tests, lint,
+format, typecheck, browser checks, ordinary `cargo build`, `go build`, `tsc`,
+or commands without durable file outputs.
+
+Document any `cx`-backed targets in `AGENTS.md`, for example:
+
+```text
+Build pipeline: just pipeline
+Incremental build: just build
+cx lint: cx lint
+```
+
+Keep `.cx/state.json`, `.cx/graph.json`, and `.cx/tmp/` out of version control.
+Do not ignore `.cx/config.toml` unless the project explicitly decides it is
+local-only.
+
+For examples and verification expectations, see
+[`cx_incremental_pipelines.md`](cx_incremental_pipelines.md). The reusable
+`just cx-examples-lab` target verifies one staged artifact pipeline and one C
+incremental build.
+
 ## Agent Context Targets
 
 Projects may expose optional agent-facing targets in addition to ordinary
