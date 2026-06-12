@@ -37,7 +37,7 @@ warn_missing_workflow_prereqs() {
   fi
   if [ "${#missing[@]}" -gt 0 ]; then
     printf 'Missing workflow executable(s): %s\n' "${missing[*]}" >&2
-    printf 'Installing the skills anyway. Install these before running the jj Gest workflow. uv is required by skill-package-installer and Python setup profiles.\n' >&2
+    printf 'Installing the skills anyway. Install these before running the jj Gest workflow. uv is required by Python setup profiles and package authoring checks.\n' >&2
   fi
 }
 
@@ -111,7 +111,11 @@ warn_optional
 
 mkdir -p "$target/.agents/skills" "$target/docs" "$target/tools" "$target/templates"
 
-copy_dir_delete "$repo_root/.agents/skills" "$target/.agents/skills"
+for source_skill in "$repo_root"/.agents/skills/*; do
+  [ -d "$source_skill" ] || continue
+  skill_name="$(basename "$source_skill")"
+  copy_dir_delete "$source_skill" "$target/.agents/skills/$skill_name"
+done
 copy_dir_delete "$repo_root/.claude" "$target/.claude"
 copy_dir_delete "$repo_root/.codex" "$target/.codex"
 copy_dir_merge "$repo_root/docs" "$target/docs"

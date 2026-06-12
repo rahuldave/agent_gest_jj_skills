@@ -23,13 +23,15 @@ separately from jj bookmark/workspace mechanics.
 ## What Is Included
 
 - `.agents/skills/g*`: reusable Gest agent skills adapted for jj workflows.
+- `.agents/skills/gest_jj_installer`: package-specific installer skill for
+  hooks, docs, templates, tools, and AGENTS guidance after `npx skills add`.
 - `.claude/`: Claude Code settings, skill links, and jj hook adapters.
 - `.codex/`: Codex hook config and guardrail scripts.
 - `AGENTS.template.md`: starter agent instructions for target repositories.
 - `docs/README.md`: documentation map.
 - `docs/TUTORIAL.md`: the deterministic beginner tutorial. Start here.
 - `docs/*.md`: reference docs and setup examples for users who need details.
-- `scripts/install.sh`: copy-based installer for target repos.
+- `scripts/install.sh`: source-checkout installer for target repos.
 - `skill-package.json`: package manifest used by `skill-package-installer` to
   validate skills, installer scripts, and executable prerequisites.
 - `scripts/sync_g_skills.sh`: sync g skills, docs, templates, and optionally
@@ -53,6 +55,23 @@ separately from jj bookmark/workspace mechanics.
 
 ## Install Into A Repo
 
+Fresh users should install the skill package directly with `npx skills` from
+inside the target repository:
+
+```bash
+npx skills add rahuldave/agent_gest_jj_skills -a codex --skill '*' -y
+```
+
+That installs the skills only. It does not run hooks or copy root-level docs,
+templates, tools, or `AGENTS.md`. After the `npx` install, ask the agent to use
+`gest_jj_installer` to install the jj Gest package extras in the current repo.
+`gest_jj_installer` carries a bundled helper that fetches this repository and
+runs the source-checkout installer with clear prerequisite messages and
+overwrite approval. Use `gsu` afterward for normal repository setup and
+command-contract refresh work.
+
+Source checkout alternative:
+
 From this repository:
 
 ```bash
@@ -68,7 +87,7 @@ missing, the installer uses a `cp` fallback.
 The installer copies:
 
 ```text
-.agents/skills/g*
+.agents/skills/g* and .agents/skills/gest_jj_installer
 .claude/
 .codex/
 docs/*.md

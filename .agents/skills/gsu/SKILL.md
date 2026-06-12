@@ -1,6 +1,6 @@
 ---
 name: gsu
-description: Gest Setup. Bootstrap or refresh a jj/Gest agent-operable repository surface: tools, command contract, Justfile targets, hooks, ignores, installs, and setup follow-ups.
+description: Gest Setup. Bootstrap or refresh a jj/Gest agent-operable repository surface across tools, command contracts, Justfile targets, hooks, ignores, installs, and setup follow-ups.
 ---
 
 # GSU: Gest Setup
@@ -135,11 +135,12 @@ with `npx skills`, hooks and templates should be installed by the package's
 explicit installer skill after `npx skills add`, not as a hidden install side
 effect. Installer scripts must report every required workflow executable without
 blocking the skill copy and mention optional executables that unlock extra
-flows. For this jj skill repo, `gsu` is the installer skill for hooks, docs,
-templates, tools, and AGENTS guidance. Required workflow executables are `git`,
-`jj`, `gest`, `just`, and `uv`; optional executables include `rsync`, `gh`,
-`jst`, `ast-grep`, `direnv`, `cx`, `node`, and `npm`. Runtime commands should
-re-check tools they actually need.
+flows. For this jj skill repo, `gest_jj_installer` is the package-specific
+installer skill for hooks, docs, templates, tools, and AGENTS guidance. `gsu`
+remains the general repo setup skill after the package is installed. Required
+workflow executables are `git`, `jj`, `gest`, `just`, and `uv`; optional
+executables include `rsync`, `gh`, `jst`, `ast-grep`, `direnv`, `cx`, `node`,
+and `npm`. Runtime commands should re-check tools they actually need.
 
 When setup creates follow-up tasks, classify them against existing project tags
 using `docs/tag_dependency_workflow.md`. If setup changes shared tooling,
