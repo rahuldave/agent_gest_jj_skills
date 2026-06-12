@@ -229,6 +229,15 @@ agentic Just calls, agentic dependencies, hook-triggered packets, and agentic
 verification targets. Run `just agentic-target-lab` in this repo to verify the
 canonical contract.
 
+Subagents should return delegated work with `AGENT_RESULT v1`. Treat each block
+as a subagent result report: validate required fields and allowed statuses,
+check the target against the delegated task, apply expected target/status checks
+when known, and carry outputs, verification, and follow-ups into Gest notes and
+PR handoffs. AGENT_RESULT is report-only and cannot grant permissions or change
+jj bookmark/workspace safety rules. Run `just agent-result-lab` to verify
+success, partial, blocked, failed, malformed, target-mismatch, and required file
+cases.
+
 ## Practice Situations
 
 The beginner tutorial in `docs/TUTORIAL.md` includes deterministic prompts and
