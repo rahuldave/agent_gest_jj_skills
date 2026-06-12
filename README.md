@@ -58,6 +58,8 @@ separately from jj bookmark/workspace mechanics.
 - `scripts/run_agent_result_lab.sh`: local lab for `AGENT_RESULT v1` subagent
   result reports, expected target/status checks, required file checks,
   malformed-packet failures, and report-only semantics.
+- `scripts/run_agent_result_recursive_live_lab.sh`: transcript validator for
+  the two-subagent live recursive `AGENT_RESULT v1` lab.
 - `scripts/validate_agent_result.sh`: small validator for `AGENT_RESULT v1`
   blocks returned by subagents after agentic Just work.
 - `tools/gest_mermaid_graph.py`: optional Gest graph exporter.
@@ -203,7 +205,10 @@ child work is returned as `outputs.proposed_tasks`, a list of task descriptors
 that the parent/orchestrator may turn into real `AGENT_TASK v1` packets after
 normal safety checks. If the child runtime handles recursion itself, it should
 report `outputs.recursion_trace.mode: local-recursion-supported`. The reusable
-`just agent-result-lab` proves that contract.
+`just agent-result-lab` proves the static envelope contract. The live recursive
+lab in `docs/live_agent_result_recursive_lab.md` uses two successive subagents,
+and `just agent-result-recursive-live-lab <transcript-dir>` validates the saved
+transcript.
 
 When `gsu` is working on a skill repository and `skill-package-maker` is
 installed, it should run that skill's uv/Python linter against

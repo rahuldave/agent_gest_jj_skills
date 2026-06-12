@@ -243,6 +243,12 @@ child runtime handles recursion itself, it should report
 target-mismatch, required file, recursive proposed-task, and local-recursion
 trace cases.
 
+Use `docs/live_agent_result_recursive_lab.md` for the live trampoline check. It
+uses two successive subagents: a planner returns a partial result with
+`outputs.proposed_tasks`, then a worker performs the approved deterministic
+child task. Run `just agent-result-recursive-live-lab <transcript-dir>` against
+the saved transcript artifacts.
+
 ## Practice Situations
 
 The beginner tutorial in `docs/TUTORIAL.md` includes deterministic prompts and

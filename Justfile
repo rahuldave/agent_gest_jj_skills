@@ -37,6 +37,9 @@ agentic-target-lab:
 agent-result-lab:
   scripts/run_agent_result_lab.sh
 
+agent-result-recursive-live-lab TRANSCRIPT_DIR:
+  scripts/run_agent_result_recursive_live_lab.sh "{{TRANSCRIPT_DIR}}"
+
 integration-live:
   scripts/run_jj_github_integration_lab.sh
 
