@@ -50,6 +50,11 @@ separately from jj bookmark/workspace mechanics.
   the Python/UV, TypeScript/NPM, Go, and Rust/Cargo profiles under jj.
 - `scripts/run_cx_examples_lab.sh`: live local examples for `cx` incremental
   builds and file-artifact pipelines.
+- `scripts/run_agentic_target_lab.sh`: local lab for generic `AGENT_TASK v1`
+  agentic Just targets, subagent handoff classification, recursive delegation,
+  malformed-packet failures, and concrete target non-detection.
+- `scripts/validate_agent_task.sh`: small validator for `AGENT_TASK v1` packets
+  emitted by agentic Just targets.
 - `tools/gest_mermaid_graph.py`: optional Gest graph exporter.
 - `templates/`: reusable setup snippets for language/profile setup.
 
@@ -176,6 +181,12 @@ prerequisites.
 one explicit C incremental build. Use `cx` only for file-producing build or
 pipeline stages inside linewise Just recipes, not for tests or ordinary
 package-manager builds.
+
+Projects may expose agentic Just targets that emit `AGENT_TASK v1` packets.
+Those packets are subagent handoffs: validate the block, then delegate the work
+to a subagent. Apply the same rule recursively to nested agentic Just calls,
+agentic dependencies, hook-triggered packets, and agentic verification targets.
+The reusable `just agentic-target-lab` proves that contract.
 
 When `gsu` is working on a skill repository and `skill-package-maker` is
 installed, it should run that skill's uv/Python linter against

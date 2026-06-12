@@ -57,6 +57,12 @@ responsibilities. Writable sub-agents must have disjoint write scopes. In jj
 repos, concurrent writable work uses one jj workspace per writable task; do not
 use git worktrees.
 
+Agentic Just targets add a mandatory delegation case: an emitted `AGENT_TASK v1`
+block is a subagent handoff packet. The current agent validates the packet and
+delegates the parsed task rather than running it inline. Nested agentic Just
+calls, agentic dependencies, hook-triggered packets, and agentic verification
+targets inherit the same recursive subagent boundary.
+
 ## JJ Workspace Execution
 
 For a parallel task:

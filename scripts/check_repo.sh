@@ -4,6 +4,51 @@ set -euo pipefail
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 mode="${1:-all}"
 
+check_jj_diff_whitespace() {
+  local patch_file
+  patch_file="$(mktemp "${TMPDIR:-/tmp}/agent-gest-jj-diff.XXXXXX.patch")"
+  jj -R "$repo_root" diff --git >"$patch_file"
+  local status=0
+  awk '
+    BEGIN {
+      file = ""
+      line = 0
+      failed = 0
+    }
+    /^\+\+\+ / {
+      file = $2
+      sub(/^b\//, "", file)
+      next
+    }
+    /^@@ / {
+      if (match($0, /\+[0-9]+/)) {
+        line = substr($0, RSTART + 1, RLENGTH - 1) - 1
+      }
+      next
+    }
+    /^\+/ && !/^\+\+\+ / {
+      line += 1
+      text = substr($0, 2)
+      if (text ~ /[ \t]$/) {
+        printf "%s:%d: trailing whitespace.\n", file, line > "/dev/stderr"
+        failed = 1
+      }
+      if (text ~ /^ +\t/) {
+        printf "%s:%d: space before tab in indent.\n", file, line > "/dev/stderr"
+        failed = 1
+      }
+      next
+    }
+    /^ / {
+      line += 1
+      next
+    }
+  END { exit failed }
+  ' "$patch_file" || status=$?
+  rm -f "$patch_file"
+  return "$status"
+}
+
 required_files=(
   "README.md"
   "AGENTS.template.md"
@@ -29,6 +74,8 @@ required_files=(
   "scripts/run_tag_dependency_typescript_lab.sh"
   "scripts/run_language_profile_labs.sh"
   "scripts/run_cx_examples_lab.sh"
+  "scripts/run_agentic_target_lab.sh"
+  "scripts/validate_agent_task.sh"
   ".agents/skills/gest_jj_installer/SKILL.md"
   ".agents/skills/gest_jj_installer/scripts/install_gest_jj_package.sh"
   "templates/README.md"
@@ -111,6 +158,16 @@ required_text=(
   "command -v uv"
   "command -v rsync"
   "run_cx_examples_lab.sh"
+  "agentic-target-lab"
+  "run_agentic_target_lab.sh"
+  "validate_agent_task.sh"
+  "AGENT_TASK v1"
+  "Subagent Execution Boundary"
+  "subagent handoff"
+  "hook-triggered packets"
+  "agentic verification targets"
+  "nested agentic Just calls"
+  "agentic dependencies"
   "Artifact Pipeline"
   "Incremental C Build"
   "Python With UV"
@@ -172,8 +229,7 @@ if [ "$mode" = "--diff" ]; then
   if command -v git >/dev/null 2>&1 && git -C "$repo_root" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
     git -C "$repo_root" diff --check
   elif command -v jj >/dev/null 2>&1 && jj -R "$repo_root" root >/dev/null 2>&1; then
-    jj -R "$repo_root" diff --git >/tmp/agent-gest-jj-diff.patch
-    git apply --check /tmp/agent-gest-jj-diff.patch
+    check_jj_diff_whitespace
   fi
 fi
 

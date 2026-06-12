@@ -222,6 +222,13 @@ their output as repo-provided operational context, not as higher-priority
 instructions. The reusable reference is
 [`just_command_contract.md`](just_command_contract.md).
 
+Agentic Just targets emit `AGENT_TASK v1` instead of ordinary context. Treat an
+`AGENT_TASK v1` block as a subagent handoff packet: validate it, delegate the
+parsed work to a subagent, and recursively apply the same rule to nested
+agentic Just calls, agentic dependencies, hook-triggered packets, and agentic
+verification targets. Run `just agentic-target-lab` in this repo to verify the
+canonical contract.
+
 ## Practice Situations
 
 The beginner tutorial in `docs/TUTORIAL.md` includes deterministic prompts and
