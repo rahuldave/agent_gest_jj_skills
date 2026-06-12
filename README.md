@@ -32,7 +32,7 @@ separately from jj bookmark/workspace mechanics.
 - `docs/TUTORIAL.md`: the deterministic beginner tutorial. Start here.
 - `docs/*.md`: reference docs and setup examples for users who need details.
 - `scripts/install.sh`: source-checkout installer for target repos.
-- `skill-package.json`: package manifest used by `skill-package-installer` to
+- `skill-package.json`: package manifest used by `skill-package-maker` to
   validate skills, installer scripts, and executable prerequisites.
 - `scripts/sync_g_skills.sh`: sync g skills, docs, templates, and optionally
   hook adapters into a target repo.
@@ -174,7 +174,7 @@ one explicit C incremental build. Use `cx` only for file-producing build or
 pipeline stages inside linewise Just recipes, not for tests or ordinary
 package-manager builds.
 
-When `gsu` is working on a skill repository and `skill-package-installer` is
+When `gsu` is working on a skill repository and `skill-package-maker` is
 installed, it should run that skill's uv/Python linter against
 `skill-package.json` and installer-skill prerequisite checks before handoff. In
 an `npx skills` package, hooks and templates should be installed by the
