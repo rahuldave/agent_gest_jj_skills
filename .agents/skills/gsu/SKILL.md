@@ -107,9 +107,33 @@ commands that modify user-level state.
     and representative focused command arguments.
 13. Record remaining setup gaps as Gest follow-ups.
 
+## Package Install Handoff
+
+For a normal target repository, `gsu` runs after the package-specific installer
+has already handled package extras. Do not use `skill-package-maker` for this
+handoff. That skill is for authoring skill packages, not for setting up a repo
+that just installed the jj Gest skills.
+
+Before ordinary setup work, verify that the expected package handoff is present:
+
+- `.agents/skills/gest_jj_installer/SKILL.md`
+- at least one core workflow skill such as `.agents/skills/gtw/SKILL.md`
+- `docs/`
+- `templates/`
+- `tools/gest_mermaid_graph.py`
+- `.claude/settings.json` and `.claude/hooks/`
+- `.codex/hooks.json` and `.codex/hooks/`
+- `AGENTS.md`, or a clear note that an existing `AGENTS.md` was preserved and
+  still needs the template guidance merged
+
+If these package extras are missing, tell the user to invoke
+`gest_jj_installer` first. Once the extras are present, proceed with normal
+`gsu` work: tool checks, ignore rules, dependency setup, command contracts,
+Justfile targets, verification commands, and follow-up tasks.
+
 ## Skill Repository Packaging
 
-When the target repository is itself a skill repository, look for
+Only when the target repository is itself a skill repository, look for
 `skill-package.json`, `skills/*/SKILL.md`, `.agents/skills/*/SKILL.md`, and
 `scripts/install.sh`. If the `skill-package-maker` skill is installed or
 available in the current source checkout, use it before declaring setup
@@ -137,14 +161,6 @@ package's explicit installer skill after `npx skills add`, not as a hidden
 install side effect. Installer scripts must report every required workflow
 executable without blocking the skill copy and mention optional executables
 that unlock extra flows.
-
-For this jj skill repo, the natural fresh-install sequence is:
-
-1. `npx skills add rahuldave/agent_gest_jj_skills -a codex --skill '*' -y`
-2. use `gest_jj_installer` to install hooks, docs, templates, tools, and AGENTS
-   guidance;
-3. use `gsu` for ordinary project setup: tool checks, ignore rules, dependency
-   setup, command contracts, Justfile targets, and follow-up tasks.
 
 Required workflow executables are `git`, `jj`, `gest`, `just`, and `uv`;
 optional executables include `rsync`, `gh`, `jst`, `ast-grep`, `direnv`, `cx`,
