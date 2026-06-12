@@ -14,6 +14,7 @@ test:
   scripts/run_language_profile_labs.sh
   scripts/run_cx_examples_lab.sh
   scripts/run_agentic_target_lab.sh
+  scripts/run_agent_result_lab.sh
 
 workflow-lab:
   scripts/run_jj_workflow_lab.sh
@@ -32,6 +33,9 @@ cx-examples-lab:
 
 agentic-target-lab:
   scripts/run_agentic_target_lab.sh
+
+agent-result-lab:
+  scripts/run_agent_result_lab.sh
 
 integration-live:
   scripts/run_jj_github_integration_lab.sh
