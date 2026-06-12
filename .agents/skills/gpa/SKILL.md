@@ -72,7 +72,7 @@ Look for parent tasks, leaves, artifacts/specs, completion notes, GitHub issue
 metadata, `github.pr`, `github.pr_url`, `vcs.bookmark`, `vcs.stack_*`, and
 graph paths.
 Also look for tag classification and dependency impact notes from
-`docs/tag_dependency_workflow.md`, especially selected semantic tags and
+`references/tag_dependency_workflow.md`, especially selected semantic tags and
 `ast-grep` dependers.
 
 ## Review

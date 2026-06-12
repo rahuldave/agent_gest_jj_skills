@@ -27,7 +27,7 @@ gest project --json
      sub-agents without separate jj workspaces when they do not write files or
      mutate Gest
 4. Before dispatching a phase, confirm every task has had the tag
-   classification pass from `docs/tag_dependency_workflow.md`. For code-facing
+   classification pass from `references/tag_dependency_workflow.md`. For code-facing
    tasks, make sure workers know which `ast-grep` dependency checks and
    semantic tags apply.
 5. Claim tasks with:

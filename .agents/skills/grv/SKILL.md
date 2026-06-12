@@ -33,7 +33,7 @@ gest search "Follow-up <module/feature>" --all --json --limit 20
 ```
 
 Review the task's tag classification and dependency impact notes from
-`docs/tag_dependency_workflow.md`. If code contracts changed, inspect the
+`references/tag_dependency_workflow.md`. If code contracts changed, inspect the
 `ast-grep` patterns that were run and the dependers they found.
 
 For non-trivial changes, act as an adversarial review aggregator. Default to

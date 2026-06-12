@@ -101,8 +101,8 @@ commands that modify user-level state.
 8. Install/sync dependencies through the chosen package manager when approved.
 9. Define the command contract in `AGENTS.md`, including focused arguments.
 10. Create/update `Justfile` targets when the project uses `just`.
-11. Install or refresh `.agents/skills`, `.claude`, `.codex`, docs, templates,
-    and graph tools from this repository when requested.
+11. Install or refresh `.agents/skills`, `.claude`, `.codex`, and AGENTS
+    guidance from this repository when requested.
 12. Run setup verification: tool discovery, `just --list`, cheap static checks,
     and representative focused command arguments.
 13. Record remaining setup gaps as Gest follow-ups.
@@ -118,16 +118,17 @@ Before ordinary setup work, verify that the expected package handoff is present:
 
 - `.agents/skills/gest_jj_installer/SKILL.md`
 - at least one core workflow skill such as `.agents/skills/gtw/SKILL.md`
-- `docs/`
-- `templates/`
-- `tools/gest_mermaid_graph.py`
+- skill-local support material under `.agents/skills/*/references/`,
+  `.agents/skills/*/scripts/`, and `.agents/skills/*/assets/` as needed
+- `.agents/skills/gsu/assets/templates/`
+- `.agents/skills/gsu/scripts/gest_mermaid_graph.py`
 - `.claude/settings.json` and `.claude/hooks/`
 - `.codex/hooks.json` and `.codex/hooks/`
 - `AGENTS.md`, or a clear note that an existing `AGENTS.md` was preserved and
   still needs the template guidance merged
 
-If these package extras are missing, tell the user to invoke
-`gest_jj_installer` first. Once the extras are present, proceed with normal
+If hooks/settings or AGENTS guidance are missing, tell the user to invoke
+`gest_jj_installer` first. Once the handoff is present, proceed with normal
 `gsu` work: tool checks, ignore rules, dependency setup, command contracts,
 Justfile targets, verification commands, and follow-up tasks.
 
@@ -135,7 +136,7 @@ Justfile targets, verification commands, and follow-up tasks.
 
 Only when the target repository is itself a skill repository, look for
 `skill-package.json`, `skills/*/SKILL.md`, `.agents/skills/*/SKILL.md`, and
-`scripts/install.sh`. If the `skill-package-maker` skill is installed or
+the repo-level installer script. If the `skill-package-maker` skill is installed or
 available in the current source checkout, use it before declaring setup
 complete.
 
@@ -156,9 +157,11 @@ uv run python /Users/rahul/Projects/agent_skill_package_maker/skills/skill-packa
 
 Require skill repos to declare their package-specific installer skill, custom
 installers, and executable prerequisites in `skill-package.json`. For packages
-installed with `npx skills`, hooks and templates should be installed by the
-package's explicit installer skill after `npx skills add`, not as a hidden
-install side effect. Installer scripts must report every required workflow
+installed with `npx skills`, hooks/settings and target-repo extras should be
+installed by the package's explicit installer skill after `npx skills add`, not
+as a hidden install side effect. Skill runtime references, templates, helper
+scripts, and assets should live inside the skill folder that needs them.
+Installer scripts must report every required workflow
 executable without blocking the skill copy and mention optional executables
 that unlock extra flows.
 
@@ -167,24 +170,24 @@ optional executables include `rsync`, `gh`, `jst`, `ast-grep`, `direnv`, `cx`,
 `node`, and `npm`. Runtime commands should re-check tools they actually need.
 
 When setup creates follow-up tasks, classify them against existing project tags
-using `docs/tag_dependency_workflow.md`. If setup changes shared tooling,
+using `references/tag_dependency_workflow.md`. If setup changes shared tooling,
 hooks, generated code, or command contracts, use `ast-grep` or targeted
 structured searches to find dependent scripts/docs before declaring setup done.
 
 ## Templates
 
-This repository includes composable snippets under `templates/`. Use them as
+This skill includes composable snippets under `assets/templates/`. Use them as
 starting points, not blind overwrites:
 
-- `templates/gitignore/base.gitignore`
-- `templates/gitignore/python-uv.gitignore`
-- `templates/gitignore/typescript-npm.gitignore`
-- `templates/gitignore/browser-agent.gitignore`
-- `templates/env/envrc.local-bin`
-- `templates/env/*.envrc`
-- `templates/env/env.example`
-- `templates/just/*.just`
-- `templates/rust/rust-toolchain.toml`
+- `assets/templates/gitignore/base.gitignore`
+- `assets/templates/gitignore/python-uv.gitignore`
+- `assets/templates/gitignore/typescript-npm.gitignore`
+- `assets/templates/gitignore/browser-agent.gitignore`
+- `assets/templates/env/envrc.local-bin`
+- `assets/templates/env/*.envrc`
+- `assets/templates/env/env.example`
+- `assets/templates/just/*.just`
+- `assets/templates/rust/rust-toolchain.toml`
 
 Every setup should include base ignore concepts. Layer profile snippets only
 when the project needs them.
@@ -192,7 +195,7 @@ when the project needs them.
 ## Command Contract
 
 Prefer `just` targets when present. `AGENTS.md` should map concepts to commands
-and argument forms. See `docs/just_command_contract.md`.
+and argument forms. See `references/just_command_contract.md`.
 
 Common mapping:
 
@@ -301,7 +304,7 @@ When adding `cx`:
   `up-to-date`, then changing one input and confirming the expected downstream
   artifacts rerun.
 
-For reusable examples, read `docs/cx_incremental_pipelines.md` and run
+For reusable examples, read `references/cx_incremental_pipelines.md` and run
 `just cx-examples-lab` in this skill repository.
 
 ## Browser Setup

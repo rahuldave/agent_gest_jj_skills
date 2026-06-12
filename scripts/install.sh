@@ -5,8 +5,8 @@ usage() {
   cat >&2 <<'USAGE'
 Usage: scripts/install.sh /path/to/target/repo
 
-Install the jj Gest agent skills, hooks, docs, templates, and graph tool into a
-target repository. Existing AGENTS.md is preserved.
+Install the jj Gest agent skills, hooks/settings, and AGENTS starter guidance
+into a target repository. Existing AGENTS.md is preserved.
 USAGE
 }
 
@@ -109,7 +109,7 @@ fi
 warn_missing_workflow_prereqs
 warn_optional
 
-mkdir -p "$target/.agents/skills" "$target/docs" "$target/tools" "$target/templates"
+mkdir -p "$target/.agents/skills"
 
 for source_skill in "$repo_root"/.agents/skills/*; do
   [ -d "$source_skill" ] || continue
@@ -118,10 +118,6 @@ for source_skill in "$repo_root"/.agents/skills/*; do
 done
 copy_dir_delete "$repo_root/.claude" "$target/.claude"
 copy_dir_delete "$repo_root/.codex" "$target/.codex"
-copy_dir_merge "$repo_root/docs" "$target/docs"
-copy_dir_delete "$repo_root/templates" "$target/templates"
-copy_file "$repo_root/tools/gest_mermaid_graph.py" "$target/tools/gest_mermaid_graph.py"
-chmod +x "$target/tools/gest_mermaid_graph.py"
 
 if [ ! -f "$target/AGENTS.md" ]; then
   cp "$repo_root/AGENTS.template.md" "$target/AGENTS.md"

@@ -27,7 +27,7 @@ Why this matters and any constraints.
 ## Create
 
 Use tags and metadata deliberately. Before creating a task, run the tag
-classification pass in `docs/tag_dependency_workflow.md`: collect existing
+classification pass in `references/tag_dependency_workflow.md`: collect existing
 project tags from tasks, artifacts, and iterations; classify the new task
 against them; select existing tags where possible; add new dynamic tags only
 when no existing tag fits; and record near misses when useful.
@@ -84,7 +84,7 @@ commit/bookmark/push checkpoint.
 ## Dependency-Aware Issue Expansion
 
 When the issue changes code behavior, identify semantic dependers before
-finalizing scope. Use `ast-grep` patterns from `docs/tag_dependency_workflow.md`
+finalizing scope. Use `ast-grep` patterns from `references/tag_dependency_workflow.md`
 to search imports, calls, components, selectors, and exported contracts. If a
 related surface should change too, add it to acceptance criteria or create a
 child task tagged with the same semantic tag.

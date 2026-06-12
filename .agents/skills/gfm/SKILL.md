@@ -48,7 +48,7 @@ incremental build/pipeline lines; it is not a test runner and should not be
 used as a substitute for `gte`.
 
 For code-facing changes, `gfm` may include lightweight `ast-grep` syntax or
-pattern checks from `docs/tag_dependency_workflow.md` when those checks are part
+pattern checks from `references/tag_dependency_workflow.md` when those checks are part
 of the mechanical contract.
 
 If no command contract exists, inspect manifests and route to `gsu` to establish

@@ -39,4 +39,4 @@ verify, commit with `gcm`, and make an explicit push/PR decision unless blocked.
 
 When docs describe task creation, code changes, or verification, include the
 tag classification and `ast-grep` dependency workflow from
-`docs/tag_dependency_workflow.md` where relevant.
+`references/tag_dependency_workflow.md` where relevant.

@@ -24,7 +24,7 @@ separately from jj bookmark/workspace mechanics.
 
 - `.agents/skills/g*`: reusable Gest agent skills adapted for jj workflows.
 - `.agents/skills/gest_jj_installer`: package-specific installer skill for
-  hooks, docs, templates, tools, and AGENTS guidance after `npx skills add`.
+  hooks/settings and AGENTS guidance after `npx skills add`.
 - `.claude/`: Claude Code settings, skill links, and jj hook adapters.
 - `.codex/`: Codex hook config and guardrail scripts.
 - `AGENTS.template.md`: starter agent instructions for target repositories.
@@ -34,8 +34,9 @@ separately from jj bookmark/workspace mechanics.
 - `scripts/install.sh`: source-checkout installer for target repos.
 - `skill-package.json`: package manifest used by `skill-package-maker` to
   validate skills, installer scripts, and executable prerequisites.
-- `scripts/sync_g_skills.sh`: sync g skills, docs, templates, and optionally
-  hook adapters into a target repo.
+- `scripts/sync_g_skills.sh`: sync g skills, including their skill-local
+  references, scripts, and assets, and optionally hook adapters into a target
+  repo.
 - `scripts/check_repo.sh`: repository shape and hook syntax checks.
 - `scripts/run_jj_workflow_lab.sh`: disposable four-situation jj workflow lab.
 - `scripts/run_jj_github_integration_lab.sh`: live GitHub integration lab that
@@ -76,12 +77,13 @@ First, install the skills:
 npx skills add rahuldave/agent_gest_jj_skills -a codex --skill '*' -y
 ```
 
-Second, ask the agent to use `gest_jj_installer` to install the jj Gest hooks,
-docs, templates, tools, and AGENTS guidance in the current repo. `npx skills
-add` installs skill folders only; it does not run hooks or copy root-level
-package extras. `gest_jj_installer` carries a bundled helper that fetches this
-repository and runs the source-checkout installer with clear prerequisite
-messages and overwrite approval.
+Second, ask the agent to use `gest_jj_installer` to install the jj Gest
+hooks/settings and AGENTS guidance in the current repo. `npx skills add`
+installs skill folders only; it does not run hooks or copy root-level package
+extras. Runtime references, helper scripts, and setup templates are vendored
+inside the installed skill folders. `gest_jj_installer` carries a bundled
+helper that fetches this repository and runs the source-checkout installer with
+clear prerequisite messages and overwrite approval.
 
 Third, use `gsu` for normal repository setup and command-contract refresh work.
 
@@ -93,11 +95,11 @@ From this repository:
 scripts/install.sh /path/to/target/repo
 ```
 
-The installer reports missing workflow executables and still copies the skill
-bundle: `git`, `jj`, `gest`, `just`, and `uv`. It also reports optional
-executables that unlock additional workflows or cleaner installs: `rsync`,
-`gh`, `jst`, `ast-grep`, `direnv`, `cx`, `node`, and `npm`. If `rsync` is
-missing, the installer uses a `cp` fallback.
+The installer copies the skill bundle and reports missing workflow executables:
+`git`, `jj`, `gest`, `just`, and `uv`. It also reports optional executables
+that unlock additional workflows or cleaner installs: `rsync`, `gh`, `jst`,
+`ast-grep`, `direnv`, `cx`, `node`, and `npm`. If `rsync` is missing, the
+installer uses a `cp` fallback.
 
 The installer copies:
 
@@ -105,11 +107,12 @@ The installer copies:
 .agents/skills/g* and .agents/skills/gest_jj_installer
 .claude/
 .codex/
-docs/*.md
-tools/gest_mermaid_graph.py
-templates/
 AGENTS.template.md -> AGENTS.md, only if AGENTS.md does not already exist
 ```
+
+Use `gsu`'s skill-local `assets/templates/` as inputs when creating
+`.gitignore`, `.envrc`, `.env.example`, or `Justfile` command contracts. The
+installer does not populate target-root `docs/`, `templates/`, or `tools/`.
 
 After installation:
 
