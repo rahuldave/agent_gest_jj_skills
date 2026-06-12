@@ -85,7 +85,7 @@ parallelize the work.
 
 ## Tag And Dependency Planning
 
-Apply `docs/tag_dependency_workflow.md` while decomposing work. For every
+Apply `references/tag_dependency_workflow.md` while decomposing work. For every
 planned task, classify tags against the current project vocabulary and add
 `classification.tags.reviewed=true` metadata. For code-facing phases, list the
 semantic contracts and `ast-grep` patterns that implementers must check. If

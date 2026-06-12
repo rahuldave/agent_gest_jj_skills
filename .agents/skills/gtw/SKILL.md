@@ -8,8 +8,8 @@ description: Gest Track Work. Route substantial jj-repo work into Gest, choose b
 GTW is the default entry point before substantial file-writing work in a
 Gest-managed jj repository.
 
-Read `docs/gest_codex_workflow.md` when more detail is needed. Use
-`docs/TUTORIAL.md` for hands-on bookmark, LazyJJ, jj-stack, and
+Read `references/gest_jj_workflow.md` when more detail is needed. Use
+`references/TUTORIAL.md` for hands-on bookmark, LazyJJ, jj-stack, and
 workspace flows.
 
 ## Core Job
@@ -227,7 +227,7 @@ would be a separate future layer.
 
 ## Tag And Dependency Classifier
 
-Use `docs/tag_dependency_workflow.md` whenever GTW creates, splits, or expands
+Use `references/tag_dependency_workflow.md` whenever GTW creates, splits, or expands
 tasks. Before `gest task create`, collect existing tags from tasks, artifacts,
 and iterations, then classify the new task against that vocabulary. Prefer
 existing semantic tags; add dynamic tags only when they describe a missing

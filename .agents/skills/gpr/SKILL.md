@@ -20,7 +20,7 @@ GitHub issue integration for development work.
 ## Workflow
 
 1. Read the Gest task/iteration/spec.
-2. Include tag classification context from `docs/tag_dependency_workflow.md`
+2. Include tag classification context from `references/tag_dependency_workflow.md`
    when public-safe; semantic tags often make GitHub issues easier to search.
 3. Sanitize internal details: remove Gest IDs, implementation-only paths, and
    private workflow notes.

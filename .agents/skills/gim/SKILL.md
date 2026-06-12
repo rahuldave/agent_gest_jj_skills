@@ -25,7 +25,7 @@ gest search "Follow-up <feature/module>" --all --json --limit 20
 
 Carry forward real `Follow-up` items and verification constraints.
 
-3. Re-run the tag/dependency workflow from `docs/tag_dependency_workflow.md`.
+3. Re-run the tag/dependency workflow from `references/tag_dependency_workflow.md`.
    Confirm selected tags still fit, add missing semantic tags, and identify
    changed contracts that need `ast-grep` depender checks.
 4. If the task is too broad or coupled surfaces are missing, split it with
