@@ -15,6 +15,7 @@ test:
   scripts/run_cx_examples_lab.sh
   scripts/run_agentic_target_lab.sh
   scripts/run_agent_result_lab.sh
+  scripts/run_agent_task_draft_lab.sh
 
 workflow-lab:
   scripts/run_jj_workflow_lab.sh
@@ -36,6 +37,9 @@ agentic-target-lab:
 
 agent-result-lab:
   scripts/run_agent_result_lab.sh
+
+agent-task-draft-lab:
+  scripts/run_agent_task_draft_lab.sh
 
 agent-result-recursive-live-lab TRANSCRIPT_DIR:
   scripts/run_agent_result_recursive_live_lab.sh "{{TRANSCRIPT_DIR}}"
