@@ -30,6 +30,11 @@ separately from jj bookmark/workspace mechanics.
 - `AGENTS.template.md`: starter agent instructions for target repositories.
 - `docs/README.md`: documentation map.
 - `docs/TUTORIAL.md`: the deterministic beginner tutorial. Start here.
+- `docs/protocol_flows.md`: the agentic packet flow guide and lab map for
+  standard `g*` skills plus `AGENT_TASK`, `AGENT_RESULT`, recursive result,
+  and task-draft validation.
+- `docs/live_protocol_flow_transcript_2026-06-14.md`: real live LLM transcript
+  for plain, recursive, unsafe, draft, promotion, and worker result flows.
 - `docs/*.md`: reference docs and setup examples for users who need details.
 - `scripts/install.sh`: source-checkout installer for target repos.
 - `skill-package.json`: package manifest used by `skill-package-maker` to
@@ -143,14 +148,18 @@ shell references, but new labs and docs should use the `jagt_lint_*` wrappers.
 The local packet labs are:
 
 ```bash
+just protocol-flow-labs
 just agentic-target-lab
 just agent-result-lab
 just agent-task-draft-lab
 ```
 
-Together they cover executable task packets, subagent result packets,
-recursive result transcripts, stochastic draft proposals, approval-gated
-promotion, and malformed/direct-execution rejection cases.
+`protocol-flow-labs` runs the static packet labs in order. Together with
+`agent-result-recursive-live-lab <transcript-dir>`, they cover executable task
+packets, subagent result packets, recursive result transcripts, stochastic
+draft proposals, approval-gated promotion, and malformed/direct-execution
+rejection cases. Read [`docs/protocol_flows.md`](docs/protocol_flows.md) for
+the full flow map.
 
 After installation:
 
