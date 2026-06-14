@@ -44,6 +44,8 @@ agent-task-draft-lab:
 agent-result-recursive-live-lab TRANSCRIPT_DIR:
   scripts/run_agent_result_recursive_live_lab.sh "{{TRANSCRIPT_DIR}}"
 
+protocol-flow-labs: agentic-target-lab agent-result-lab agent-task-draft-lab
+
 integration-live:
   scripts/run_jj_github_integration_lab.sh
 
